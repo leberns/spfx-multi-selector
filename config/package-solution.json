@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "spfx-multi-selector-client-side-solution",
+    "id": "ae4b52e8-4db3-419d-a410-484158ba8c4e",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true
+  },
+  "paths": {
+    "zippedPackage": "solution/spfx-multi-selector.sppkg"
+  }
+}

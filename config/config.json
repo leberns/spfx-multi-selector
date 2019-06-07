@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "sp-fx-multi-selector-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/spFxMultiSelector/SpFxMultiSelectorWebPart.js",
+          "manifest": "./src/webparts/spFxMultiSelector/SpFxMultiSelectorWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "SpFxMultiSelectorWebPartStrings": "lib/webparts/spFxMultiSelector/loc/{locale}.js"
+  }
+}
