@@ -1,22 +1,21 @@
 import * as React from 'react';
 
-import styles from './SuboptionsSelector2.module.scss';
-import { ISuboptionsSelectorProps } from './ISuboptionsSelectorProps';
-import { ISuboptionsSelectorState } from './ISuboptionsSelectorState';
+import { ISuboptionsProviderProps } from './ISuboptionsProviderProps';
+import { ISuboptionsProviderState } from './ISuboptionsProviderState';
 import SuboptionsRenderer from '../suboptionsRenderer/SuboptionsRenderer';
 import { ISuboption } from '../../../../interfaces/ISuboption';
 
-export default class SuboptionsSelector extends React.Component<ISuboptionsSelectorProps, ISuboptionsSelectorState> {
-  constructor(props: ISuboptionsSelectorProps) {
+export default class SuboptionsProvider extends React.Component<ISuboptionsProviderProps, ISuboptionsProviderState> {
+  constructor(props: ISuboptionsProviderProps) {
     super(props);
     this.state = {
       mainOptionsSuboptions: []
     };
   }
 
-  public render(): React.ReactElement<ISuboptionsSelectorProps> {
+  public render(): React.ReactElement<ISuboptionsProviderProps> {
     return (
-      <div className={styles.suboptionsSelector}>
+      <div>
         {this.props.selectedMainOptions.map(mainOption => (
           <SuboptionsRenderer
             mainOption={mainOption}
