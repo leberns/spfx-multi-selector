@@ -6,7 +6,7 @@ import { ISpFxMultiSelectorProps } from './ISpFxMultiSelectorProps';
 import { ISpFxMultiSelectorState } from './ISpFxMultiSelectorState';
 import MultiSelector from './multiSelector/MultiSelector';
 import { IMainOption } from '../../../interfaces/IMainOption';
-import { ISubOption } from '../../../interfaces/ISubOption';
+import { ISuboption } from '../../../interfaces/ISuboption';
 
 export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelectorProps, ISpFxMultiSelectorState> {
   constructor(props: ISpFxMultiSelectorProps) {
@@ -40,7 +40,7 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
     }
   ];
 
-  private subOptions: ISubOption[] = [
+  private subOptions: ISuboption[] = [
     {
       id: 1,
       title: 'John Blue',
@@ -88,7 +88,7 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
               <MultiSelector
                 mainOptions={this.mainOptions}
                 subOptions={this.subOptions}
-                onSelectionComplete={(selectedMainOptions: IMainOption[], selectedSubOptions: ISubOption[]) =>
+                onSelectionComplete={(selectedMainOptions: IMainOption[], selectedSubOptions: ISuboption[]) =>
                   this.onSelectionComplete(selectedMainOptions, selectedSubOptions)
                 }
               />
@@ -119,7 +119,7 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
     );
   }
 
-  private onSelectionComplete(selectedMainOptions: IMainOption[], selectedSubOptions: ISubOption[]): void {
+  private onSelectionComplete(selectedMainOptions: IMainOption[], selectedSubOptions: ISuboption[]): void {
     this.setState({
       selectedMainOptions: [...selectedMainOptions],
       selectedSubOptions: [...selectedSubOptions]

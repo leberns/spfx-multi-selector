@@ -1,8 +1,8 @@
 import { IMainOption } from '../../../../interfaces/IMainOption';
-import { ISubOption } from '../../../../interfaces/ISubOption';
+import { ISuboption } from '../../../../interfaces/ISuboption';
 
 export interface IMultiSelectorProps {
   mainOptions: IMainOption[];
-  subOptions: ISubOption[];
-  onSelectionComplete: (selectedMainOptions: IMainOption[], selectedSubOptions: ISubOption[]) => void;
+  subOptions: ISuboption[];
+  onSelectionComplete: (selectedMainOptions: IMainOption[], selectedSuboptions: ISuboption[]) => void;
 }

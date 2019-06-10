@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Checkbox } from 'office-ui-fabric-react';
 
 import styles from './OptionsArray.module.scss';
-import { IOptionsArrayProps } from './IOptionsArray';
+import { IOptionsArrayProps } from './IOptionsArrayProps';
 import { IOptionItem } from '../../../../interfaces/IOptionItem';
 
 export default class OptionsArray extends React.Component<IOptionsArrayProps, {}> {

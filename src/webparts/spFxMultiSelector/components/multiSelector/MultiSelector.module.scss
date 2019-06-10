@@ -1,5 +1,16 @@
 @import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
 
 .multiSelector {
-  display: block;
+  .row {
+    @include ms-Grid-row;
+  }
+
+  .halfColumns {
+    @include ms-Grid-col;
+    @include ms-sm6;
+    @include ms-md6;
+    @include ms-lg6;
+    @include ms-xl6;
+    @include ms-xxl6;
+  }
 }

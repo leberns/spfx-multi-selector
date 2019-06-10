@@ -1,7 +1,7 @@
 import { IMainOption } from '../../../interfaces/IMainOption';
-import { ISubOption } from '../../../interfaces/ISubOption';
+import { ISuboption } from '../../../interfaces/ISuboption';
 
 export interface ISpFxMultiSelectorState {
   selectedMainOptions: IMainOption[];
-  selectedSubOptions: ISubOption[];
+  selectedSubOptions: ISuboption[];
 }
