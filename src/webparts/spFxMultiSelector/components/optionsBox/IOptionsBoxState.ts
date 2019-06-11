@@ -1,5 +1,5 @@
 import { IComboBoxOption } from 'office-ui-fabric-react';
 
-export interface ISuboptionsRendererState {
+export interface IOptionsBoxState {
   comboOptions: IComboBoxOption[];
 }

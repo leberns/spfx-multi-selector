@@ -3,6 +3,7 @@ import { ISuboption } from '../../../../interfaces/ISuboption';
 
 export interface ISuboptionsRendererProps {
   mainOption: IMainOption;
-  options: ISuboption[];
-  onChange: (isChecked: boolean, option: ISuboption) => void;
+  relatedSuboptions: ISuboption[];
+  onUnlimitedSuboptionChange: (suboption: ISuboption, isChecked: boolean) => void;
+  onSingleSuboptionChange: (suboption: ISuboption) => void;
 }

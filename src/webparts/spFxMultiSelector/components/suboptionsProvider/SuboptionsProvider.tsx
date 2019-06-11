@@ -3,6 +3,7 @@ import * as React from 'react';
 import { ISuboptionsProviderProps } from './ISuboptionsProviderProps';
 import { ISuboptionsProviderState } from './ISuboptionsProviderState';
 import SuboptionsRenderer from '../suboptionsRenderer/SuboptionsRenderer';
+import { IMainOption } from '../../../../interfaces/IMainOption';
 import { ISuboption } from '../../../../interfaces/ISuboption';
 
 export default class SuboptionsProvider extends React.Component<ISuboptionsProviderProps, ISuboptionsProviderState> {
@@ -18,32 +19,44 @@ export default class SuboptionsProvider extends React.Component<ISuboptionsProvi
       <div>
         {this.props.selectedMainOptions.map(mainOption => (
           <SuboptionsRenderer
+            key={mainOption.id}
             mainOption={mainOption}
-            options={this.state.mainOptionsSuboptions[mainOption.id]}
-            onChange={(isChecked: boolean, option: ISuboption) => this.onChange(isChecked, option)}
+            relatedSuboptions={this.getRelatedSuboptions(mainOption.id)}
+            onUnlimitedSuboptionChange={(suboption: ISuboption, isChecked: boolean) =>
+              this.props.onUnlimitedSuboptionChange(suboption, isChecked)
+            }
+            onSingleSuboptionChange={(suboption: ISuboption) =>
+              this.props.onSingleSuboptionChange(suboption, mainOption)
+            }
           />
         ))}
       </div>
     );
   }
 
-  public componentDidMount(): void {
-    this.defineRelatedSuboptions();
+  private getRelatedSuboptions(id: number): ISuboption[] {
+    let suboptions = this.state.mainOptionsSuboptions[id];
+    if (suboptions === undefined) {
+      suboptions = [];
+    }
+    return suboptions;
+  }
+
+  public componentDidUpdate(prevProps: ISuboptionsProviderProps): void {
+    if (this.props.selectedMainOptions.length !== prevProps.selectedMainOptions.length) {
+      this.defineRelatedSuboptions();
+    }
   }
 
   private defineRelatedSuboptions(): void {
     const mainOptionsSuboptions: object = {};
     for (const mainOption of this.props.selectedMainOptions) {
       const parentId = mainOption.id;
-      const relatedSuboptions = this.props.suboptions.map(op => op.parentId === parentId);
+      const relatedSuboptions = this.props.suboptions.filter(op => op.parentId === parentId);
       mainOptionsSuboptions[parentId] = relatedSuboptions;
     }
     this.setState({
       mainOptionsSuboptions
     });
-  }
-
-  private onChange(isChecked: boolean, option: ISuboption): void {
-    this.props.onChange(isChecked, option);
   }
 }

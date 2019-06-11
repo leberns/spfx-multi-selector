@@ -8,6 +8,8 @@ import { IMultiSelectorState } from './IMultiSelectorState';
 import { IOptionItem } from '../../../../interfaces/IOptionItem';
 import { IMainOption } from '../../../../interfaces/IMainOption';
 import { ISuboption } from '../../../../interfaces/ISuboption';
+import SuboptionsProvider from '../suboptionsProvider/SuboptionsProvider';
+import { SelectionAllowance } from '../../../../enums/SelectionAllowance';
 
 export default class MultiSelector extends React.Component<IMultiSelectorProps, IMultiSelectorState> {
   constructor(props: IMultiSelectorProps) {
@@ -26,13 +28,19 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
           <div className={styles.halfColumns}>
             <OptionsArray
               options={this.props.mainOptions}
-              onChange={(isChecked: boolean, option: IMainOption) => this.onMainOptionChange(isChecked, option)}
+              onChange={(option: IMainOption, isChecked: boolean) => this.onMainOptionChange(option, isChecked)}
             />
           </div>
           <div className={styles.halfColumns}>
-            <OptionsArray
-              options={this.props.subOptions}
-              onChange={(isChecked: boolean, option: ISuboption) => this.onSubOptionChange(isChecked, option)}
+            <SuboptionsProvider
+              selectedMainOptions={this.state.selectedMainOptions}
+              suboptions={this.props.suboptions}
+              onUnlimitedSuboptionChange={(suboption: ISuboption, isChecked: boolean) =>
+                this.onUnlimitedSuboptionChange(isChecked, suboption)
+              }
+              onSingleSuboptionChange={(suboption: ISuboption, mainOption: IMainOption) =>
+                this.onSingleSuboptionChange(suboption, mainOption)
+              }
             />
           </div>
         </div>
@@ -49,7 +57,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
     );
   }
 
-  private onMainOptionChange(isChecked: boolean, option: IMainOption): void {
+  private onMainOptionChange(option: IMainOption, isChecked: boolean): void {
     const newSelectedOptions = this.updateSelectedOptions<IMainOption>(
       isChecked,
       option,
@@ -61,8 +69,6 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
       selectedMainOptions: newSelectedOptions,
       hasMainOptionSelected
     });
-
-    console.log(isChecked, option.title, option.id, newSelectedOptions);
   }
 
   private updateSelectedOptions<T extends IOptionItem>(isChecked: boolean, option: T, selectedOptions: T[]): T[] {
@@ -81,22 +87,39 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
   }
 
   private removeSelectedOption<T extends IOptionItem>(option: T, selectedOptions: T[]): T[] {
-    const newOptions = selectedOptions.filter(op => {
+    const newSelectedOptions = selectedOptions.filter(op => {
       if (op.id !== option.id) {
         return op;
       }
     });
-    return newOptions;
+    return newSelectedOptions;
   }
 
-  private onSubOptionChange(isChecked: boolean, option: ISuboption): void {
-    const newSelectedOptions = this.updateSelectedOptions<ISuboption>(isChecked, option, this.state.selectedSuboptions);
+  private onUnlimitedSuboptionChange(isChecked: boolean, suboption: ISuboption): void {
+    this.updateSuboptionsState(isChecked, suboption, this.state.selectedSuboptions);
+  }
+
+  private updateSuboptionsState(isChecked: boolean, suboption: ISuboption, currentSelection: ISuboption[]): void {
+    const selectedSuboptions = this.updateSelectedOptions<ISuboption>(isChecked, suboption, currentSelection);
 
     this.setState({
-      selectedSuboptions: newSelectedOptions
+      selectedSuboptions
     });
 
-    console.log(isChecked, option.title, option.id, newSelectedOptions);
+    console.log(isChecked, suboption.title, suboption.id, selectedSuboptions);
+  }
+
+  private onSingleSuboptionChange(suboption: ISuboption, mainOption: IMainOption): void {
+    let currentSelection = this.state.selectedSuboptions;
+    if (mainOption.selectionAllowance === SelectionAllowance.Single) {
+      const parentId = mainOption.id;
+      const previousSuboptions = currentSelection.filter(op => op.parentId === parentId);
+      if (previousSuboptions.length > 0) {
+        const previousSuboption = previousSuboptions[0];
+        currentSelection = this.removeSelectedOption<ISuboption>(previousSuboption, currentSelection);
+      }
+    }
+    this.updateSuboptionsState(true, suboption, currentSelection);
   }
 
   private onSelectionComplete(): void {

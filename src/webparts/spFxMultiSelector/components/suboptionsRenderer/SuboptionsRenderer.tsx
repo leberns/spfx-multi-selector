@@ -1,53 +1,28 @@
 import * as React from 'react';
-import { ComboBox, IComboBoxOption, IComboBox } from 'office-ui-fabric-react';
+import { escape } from '@microsoft/sp-lodash-subset';
 
 import { ISuboptionsRendererProps } from './ISuboptionsRendererProps';
-import { ISuboptionsRendererState } from './ISuboptionsRendererState';
+import { SelectionAllowance } from '../../../../enums/SelectionAllowance';
 import OptionsArray from '../optionsArray/OptionsArray';
-import { ISuboption } from '../../../../interfaces/ISuboption';
+import OptionsBox from '../optionsBox/OptionsBox';
 
-export default class SuboptionsRenderer extends React.Component<ISuboptionsRendererProps, ISuboptionsRendererState> {
-  constructor(props: ISuboptionsRendererProps) {
-    super(props);
-    this.state = {
-      comboOptions: []
-    };
-  }
-
+export default class SuboptionsRenderer extends React.Component<ISuboptionsRendererProps, {}> {
   public render(): React.ReactElement<ISuboptionsRendererProps> {
-    if (this.props.mainOption.selectionAllowance === 0) {
-      return <OptionsArray options={this.props.options} onChange={this.props.onChange} />;
+    if (this.props.relatedSuboptions.length === 0) {
+      return null;
     }
 
+    const { title, selectionAllowance } = this.props.mainOption;
+
     return (
-      <ComboBox
-        label={this.props.mainOption.title}
-        autoComplete="on"
-        options={this.state.comboOptions}
-        onChange={(event: React.FormEvent<IComboBox>) => this.onChange(event)}
-      />
+      <div>
+        <div>{escape(title)}</div>
+        {selectionAllowance === SelectionAllowance.Unlimited ? (
+          <OptionsArray options={this.props.relatedSuboptions} onChange={this.props.onUnlimitedSuboptionChange} />
+        ) : (
+          <OptionsBox options={this.props.relatedSuboptions} onChange={this.props.onSingleSuboptionChange} />
+        )}
+      </div>
     );
-  }
-
-  public componentDidMount(): void {
-    this.defineComboOptions();
-  }
-
-  public defineComboOptions(): void {
-    const comboOptions: IComboBoxOption[] = this.props.options.map(option => {
-      const comboOption: IComboBoxOption = {
-        key: option.id,
-        text: option.title
-      };
-      return comboOption;
-    });
-    this.setState({
-      comboOptions
-    });
-  }
-
-  private onChange(event: React.FormEvent<IComboBox>): void {
-    console.log(event);
-    //this.props.onChange(isChecked, option);
   }
 }

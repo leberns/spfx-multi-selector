@@ -3,6 +3,6 @@ import { ISuboption } from '../../../../interfaces/ISuboption';
 
 export interface IMultiSelectorProps {
   mainOptions: IMainOption[];
-  subOptions: ISuboption[];
+  suboptions: ISuboption[];
   onSelectionComplete: (selectedMainOptions: IMainOption[], selectedSuboptions: ISuboption[]) => void;
 }

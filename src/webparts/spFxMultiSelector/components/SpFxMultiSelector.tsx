@@ -87,7 +87,7 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
               <h2>Personal Available</h2>
               <MultiSelector
                 mainOptions={this.mainOptions}
-                subOptions={this.subOptions}
+                suboptions={this.subOptions}
                 onSelectionComplete={(selectedMainOptions: IMainOption[], selectedSubOptions: ISuboption[]) =>
                   this.onSelectionComplete(selectedMainOptions, selectedSubOptions)
                 }
