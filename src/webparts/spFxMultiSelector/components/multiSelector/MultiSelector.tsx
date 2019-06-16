@@ -52,7 +52,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
           </div>
         </div>
         <div className={styles.row}>
-          <div className={styles.halfColumns}>
+          <div className={styles.column}>
             <PrimaryButton disabled={allowComplete} text={completeLabel} onClick={() => this.onSelectionComplete()} />
           </div>
         </div>

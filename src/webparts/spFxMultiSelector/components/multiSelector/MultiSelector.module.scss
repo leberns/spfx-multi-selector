@@ -5,6 +5,20 @@
     @include ms-Grid-row;
   }
 
+  .column {
+    @include ms-Grid-col;
+    @include ms-sm12;
+    @include ms-md12;
+    @include ms-lg12;
+    @include ms-xl12;
+    @include ms-xxl12;
+    @include ms-smPush10;
+    @include ms-mdPush10;
+    @include ms-lgPush10;
+    @include ms-xlPush10;
+    @include ms-xxlPush10;
+  }
+
   .halfColumns {
     @include ms-Grid-col;
     @include ms-sm6;
