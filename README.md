@@ -1,8 +1,8 @@
 # SpFx Multi Selector
 
-A cascaring multi selector web part built with SharePoint Framework for SharePoint 2019 and SharePoint Online. 
+A cascaring multi selector web part built with SharePoint Framework for SharePoint 2019 and SharePoint Online.
 
-### Building the code
+## Building the code
 
 ```bash
 git clone the repo
@@ -11,8 +11,6 @@ npm i -g gulp
 gulp
 ```
 
-This package produces the following:
+## Images
 
-* lib/* - intermediate-stage commonjs build artifacts
-* dist/* - the bundled script, along with other resources
-* deploy/* - all resources which should be uploaded to a CDN.
+![image](./images/multiselector-demo-1.png)
