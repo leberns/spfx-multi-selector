@@ -24,13 +24,13 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
       selectionAllowance: 0
     },
     {
-      key: 'TB',
-      title: 'Team B',
+      key: 'TC',
+      title: 'Team C',
       selectionAllowance: 0
     },
     {
-      key: 'TC',
-      title: 'Team C',
+      key: 'TB',
+      title: 'Team B',
       selectionAllowance: 1
     },
     {
@@ -100,15 +100,14 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
               <ul>
                 {this.state.selectedMainOptions.map(option => (
                   <li key={option.key}>
-                    {escape(option.title)} ({escape(option.key.toString())})
+                    {escape(option.title)} ({escape(option.key)})
                   </li>
                 ))}
               </ul>
               <ul>
                 {this.state.selectedSubOptions.map(option => (
                   <li key={option.key}>
-                    {escape(option.title)} ({escape(option.key.toString())}, parent option:{' '}
-                    {escape(option.parentKey.toString())})
+                    {escape(option.title)} ({escape(option.key)}, team: {escape(option.parentKey.toString())})
                   </li>
                 ))}
               </ul>

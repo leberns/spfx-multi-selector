@@ -12,6 +12,7 @@ import SuboptionsRenderer from '../suboptionsRenderer/SuboptionsRenderer';
 import { SelectionAllowance } from '../../../../enums/SelectionAllowance';
 import { RelationMap } from '../../../../commons/relations/RelationMap';
 import { IRelationMap } from '../../../../commons/relations/IRelationMap';
+import { OptionsComparer } from '../../../../commons/comparers/OptionsComparer';
 
 export default class MultiSelector extends React.Component<IMultiSelectorProps, IMultiSelectorState> {
   private suboptionsMap: IRelationMap;
@@ -19,6 +20,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
   constructor(props: IMultiSelectorProps) {
     super(props);
     this.state = {
+      mainOptions: this.props.mainOptions,
       selectedMainOptions: [],
       selectedSuboptions: [],
       hasMainOptionSelected: false
@@ -33,7 +35,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
         <div className={styles.row}>
           <div className={styles.halfColumns}>
             <MultiOptionsEditor
-              options={this.props.mainOptions}
+              options={this.state.mainOptions}
               onChange={(isChecked: boolean, option: IMainOption) => this.onMainOptionChange(isChecked, option)}
             />
           </div>
@@ -60,15 +62,27 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
 
   public componentDidMount(): void {
     this.initializeSuboptionsMap();
+    this.sortOptionsUpdateState();
   }
 
-  public componentDidUpdate(): void {
+  public componentDidUpdate(prevProps: IMultiSelectorProps): void {
     this.initializeSuboptionsMap();
+    if (this.props.mainOptions.length !== prevProps.mainOptions.length) {
+      this.sortOptionsUpdateState();
+    }
   }
 
   private initializeSuboptionsMap(): void {
     this.suboptionsMap = new RelationMap(this.props.mainOptions, this.props.suboptions);
     this.suboptionsMap.initializeRelations();
+  }
+
+  public sortOptionsUpdateState(): void {
+    const comparer = new OptionsComparer();
+    const sortedMainOptions = this.props.mainOptions.sort((a, b) => comparer.compare(a, b));
+    this.setState({
+      mainOptions: sortedMainOptions
+    });
   }
 
   private onMainOptionChange(isChecked: boolean, mainOption: IMainOption): void {
