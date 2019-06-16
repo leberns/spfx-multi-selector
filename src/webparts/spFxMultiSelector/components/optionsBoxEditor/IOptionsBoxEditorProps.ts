@@ -1,6 +1,6 @@
 import { IOptionItem } from '../../../../interfaces/IOptionItem';
 
-export interface IOptionsEditorProps {
+export interface IOptionsBoxEditorProps {
   options: IOptionItem[];
   onChange: (option: IOptionItem) => void;
 }

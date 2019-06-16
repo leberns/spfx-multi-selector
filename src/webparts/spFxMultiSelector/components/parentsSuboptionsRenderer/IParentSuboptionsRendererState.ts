@@ -1,5 +1,5 @@
 import { IMainOption } from '../../../../interfaces/IMainOption';
 
-export interface ISuboptionsRendererState {
+export interface IParentsSuboptionsRendererState {
   sortedMainOptions: IMainOption[];
 }

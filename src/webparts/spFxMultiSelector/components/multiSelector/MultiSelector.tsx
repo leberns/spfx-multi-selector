@@ -8,7 +8,7 @@ import { IMultiSelectorState } from './IMultiSelectorState';
 import { IOptionItem } from '../../../../interfaces/IOptionItem';
 import { IMainOption } from '../../../../interfaces/IMainOption';
 import { ISuboption } from '../../../../interfaces/ISuboption';
-import SuboptionsRenderer from '../suboptionsRenderer/SuboptionsRenderer';
+import ParentsSuboptionsRenderer from '../parentsSuboptionsRenderer/ParentsSuboptionsRenderer';
 import { SelectionAllowance } from '../../../../enums/SelectionAllowance';
 import { RelationMap } from '../../../../commons/relations/RelationMap';
 import { IRelationMap } from '../../../../commons/relations/IRelationMap';
@@ -40,7 +40,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
             />
           </div>
           <div className={styles.halfColumns}>
-            <SuboptionsRenderer
+            <ParentsSuboptionsRenderer
               selectedMainOptions={this.state.selectedMainOptions}
               suboptions={this.props.suboptions}
               suboptionsMap={this.suboptionsMap}

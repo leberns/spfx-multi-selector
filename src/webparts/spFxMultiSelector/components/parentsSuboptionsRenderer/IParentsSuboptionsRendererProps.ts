@@ -1,9 +1,11 @@
 import { IMainOption } from '../../../../interfaces/IMainOption';
 import { ISuboption } from '../../../../interfaces/ISuboption';
+import { IRelationMap } from '../../../../commons/relations/IRelationMap';
 
-export interface IChildOptionsRendererProps {
-  mainOption: IMainOption;
-  relatedSuboptions: ISuboption[];
+export interface IParentsSuboptionsRendererProps {
+  selectedMainOptions: IMainOption[];
+  suboptions: ISuboption[];
+  suboptionsMap: IRelationMap;
   onUnlimitedSuboptionChange: (isChecked: boolean, suboption: ISuboption) => void;
   onSingleSuboptionChange: (suboption: ISuboption) => void;
 }
