@@ -8,13 +8,13 @@ import { IMultiSelectorState } from './IMultiSelectorState';
 import { IOptionItem } from '../../../../interfaces/IOptionItem';
 import { IMainOption } from '../../../../interfaces/IMainOption';
 import { ISuboption } from '../../../../interfaces/ISuboption';
-import SuboptionsProvider from '../suboptionsProvider/SuboptionsProvider';
+import SuboptionsRenderer from '../suboptionsRenderer/SuboptionsRenderer';
 import { SelectionAllowance } from '../../../../enums/SelectionAllowance';
 import { RelationMap } from '../../../../commons/relations/RelationMap';
 import { IRelationMap } from '../../../../commons/relations/IRelationMap';
 
 export default class MultiSelector extends React.Component<IMultiSelectorProps, IMultiSelectorState> {
-  private optionsMap: IRelationMap;
+  private suboptionsMap: IRelationMap;
 
   constructor(props: IMultiSelectorProps) {
     super(props);
@@ -26,6 +26,8 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
   }
 
   public render(): React.ReactElement<IMultiSelectorProps> {
+    const allowComplete = !this.state.hasMainOptionSelected;
+    const completeLabel = 'Select';
     return (
       <div className={styles.multiSelector}>
         <div className={styles.row}>
@@ -36,39 +38,48 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
             />
           </div>
           <div className={styles.halfColumns}>
-            <SuboptionsProvider
+            <SuboptionsRenderer
               selectedMainOptions={this.state.selectedMainOptions}
               suboptions={this.props.suboptions}
+              suboptionsMap={this.suboptionsMap}
               onUnlimitedSuboptionChange={(isChecked: boolean, suboption: ISuboption) =>
                 this.onUnlimitedSuboptionChange(isChecked, suboption)
               }
-              onSingleSuboptionChange={(mainOption: IMainOption, suboption: ISuboption) =>
-                this.onSingleSuboptionChange(mainOption, suboption)
-              }
+              onSingleSuboptionChange={(suboption: ISuboption) => this.onSingleSuboptionChange(suboption)}
             />
           </div>
         </div>
         <div className={styles.row}>
           <div className={styles.halfColumns}>
-            <PrimaryButton
-              disabled={!this.state.hasMainOptionSelected}
-              text="Select"
-              onClick={() => this.onSelectionComplete()}
-            />
+            <PrimaryButton disabled={allowComplete} text={completeLabel} onClick={() => this.onSelectionComplete()} />
           </div>
         </div>
       </div>
     );
   }
 
+  public componentDidMount(): void {
+    this.initializeSuboptionsMap();
+  }
+
+  public componentDidUpdate(): void {
+    this.initializeSuboptionsMap();
+  }
+
+  private initializeSuboptionsMap(): void {
+    this.suboptionsMap = new RelationMap(this.props.mainOptions, this.props.suboptions);
+    this.suboptionsMap.initializeRelations();
+  }
+
   private onMainOptionChange(isChecked: boolean, mainOption: IMainOption): void {
     let newSelectedMainOptions: IMainOption[];
-    let newSelectedSuboptions = this.state.selectedSuboptions;
+    let newSelectedSuboptions: ISuboption[];
     if (isChecked) {
       newSelectedMainOptions = [mainOption, ...this.state.selectedMainOptions];
+      newSelectedSuboptions = this.state.selectedSuboptions;
     } else {
       newSelectedMainOptions = this.state.selectedMainOptions.filter(op => op.id !== mainOption.id);
-      newSelectedSuboptions = this.clearRelatedSuboptions(mainOption);
+      newSelectedSuboptions = this.clearRelatedSuboptions(mainOption.id);
     }
 
     const hasMainOptionSelected = newSelectedMainOptions.length > 0;
@@ -80,14 +91,9 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
     });
   }
 
-  private clearRelatedSuboptions(mainOption: IMainOption): ISuboption[] {
-    if (!this.optionsMap) {
-      this.optionsMap = new RelationMap(this.props.mainOptions, this.props.suboptions);
-      this.optionsMap.initializeRelations();
-    }
-
+  private clearRelatedSuboptions(parentId: number): ISuboption[] {
     let newSelectedSuboptions = this.state.selectedSuboptions;
-    const relatedSuboptions = this.optionsMap.getChildren(mainOption.id);
+    const relatedSuboptions = this.suboptionsMap.getChildren(parentId);
     relatedSuboptions.forEach(relatedSuboption => {
       newSelectedSuboptions = newSelectedSuboptions.filter(op => op.id === relatedSuboption.id);
     });
@@ -111,10 +117,9 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
     });
   }
 
-  private onSingleSuboptionChange(mainOption: IMainOption, suboption: ISuboption): void {
-    const selectedSuboptions = this.state.selectedSuboptions;
-    const newSelections = selectedSuboptions.filter(op => op.parentId !== mainOption.id);
-    this.updateSuboptionsState(true, suboption, newSelections);
+  private onSingleSuboptionChange(suboption: ISuboption): void {
+    const newSelectedSuboptions = this.clearRelatedSuboptions(suboption.parentId);
+    this.updateSuboptionsState(true, suboption, newSelectedSuboptions);
   }
 
   private onSelectionComplete(): void {

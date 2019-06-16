@@ -1,27 +1,32 @@
 import * as React from 'react';
-import { escape } from '@microsoft/sp-lodash-subset';
 
 import { ISuboptionsRendererProps } from './ISuboptionsRendererProps';
-import { SelectionAllowance } from '../../../../enums/SelectionAllowance';
-import OptionsArray from '../optionsArray/OptionsArray';
-import OptionsBox from '../optionsBox/OptionsBox';
+import { ISuboptionsRendererState } from './ISuboptionsRendererState';
+import ChildOptionsRenderer from '../childOptionsRenderer/ChildOptionsRenderer';
+import { ISuboption } from '../../../../interfaces/ISuboption';
 
-export default class SuboptionsRenderer extends React.Component<ISuboptionsRendererProps, {}> {
+export default class SuboptionsRenderer extends React.Component<ISuboptionsRendererProps, ISuboptionsRendererState> {
+  constructor(props: ISuboptionsRendererProps) {
+    super(props);
+    this.state = {
+      mainOptionsSuboptions: []
+    };
+  }
+
   public render(): React.ReactElement<ISuboptionsRendererProps> {
-    if (this.props.relatedSuboptions.length === 0) {
-      return null;
-    }
-
-    const { title, selectionAllowance } = this.props.mainOption;
-
     return (
       <div>
-        <div>{escape(title)}</div>
-        {selectionAllowance === SelectionAllowance.Unlimited ? (
-          <OptionsArray options={this.props.relatedSuboptions} onChange={this.props.onUnlimitedSuboptionChange} />
-        ) : (
-          <OptionsBox options={this.props.relatedSuboptions} onChange={this.props.onSingleSuboptionChange} />
-        )}
+        {this.props.selectedMainOptions.map(mainOption => (
+          <ChildOptionsRenderer
+            key={mainOption.id}
+            mainOption={mainOption}
+            relatedSuboptions={this.props.suboptionsMap.getChildren(mainOption.id)}
+            onUnlimitedSuboptionChange={(isChecked: boolean, suboption: ISuboption) =>
+              this.props.onUnlimitedSuboptionChange(isChecked, suboption)
+            }
+            onSingleSuboptionChange={(suboption: ISuboption) => this.props.onSingleSuboptionChange(suboption)}
+          />
+        ))}
       </div>
     );
   }
