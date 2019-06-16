@@ -5,11 +5,9 @@ import MultiOptionsEditor from '../multiOptionsEditor/MultiOptionsEditor';
 import styles from './MultiSelector.module.scss';
 import { IMultiSelectorProps } from './IMultiSelectorProps';
 import { IMultiSelectorState } from './IMultiSelectorState';
-import { IOptionItem } from '../../../interfaces/IOptionItem';
 import { IMainOption } from '../../../interfaces/IMainOption';
 import { ISuboption } from '../../../interfaces/ISuboption';
 import ParentsSuboptionsRenderer from './parentsSuboptionsRenderer/ParentsSuboptionsRenderer';
-import { SelectionAllowance } from '../../../enums/SelectionAllowance';
 import { RelationMap } from '../../relations/RelationMap';
 import { IRelationMap } from '../../relations/IRelationMap';
 import { OptionsComparer } from '../../comparers/OptionsComparer';
@@ -109,7 +107,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
     let newSelectedSuboptions = this.state.selectedSuboptions;
     const relatedSuboptions = this.suboptionsMap.getChildren(parentKey);
     relatedSuboptions.forEach(relatedSuboption => {
-      newSelectedSuboptions = newSelectedSuboptions.filter(op => op.key === relatedSuboption.key);
+      newSelectedSuboptions = newSelectedSuboptions.filter(op => op.key !== relatedSuboption.key);
     });
     return newSelectedSuboptions;
   }
