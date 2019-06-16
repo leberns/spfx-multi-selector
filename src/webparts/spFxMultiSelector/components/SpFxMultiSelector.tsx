@@ -19,22 +19,22 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
 
   private mainOptions: IMainOption[] = [
     {
-      id: 1,
+      key: 'TA',
       title: 'Team A',
       selectionAllowance: 0
     },
     {
-      id: 2,
+      key: 'TB',
       title: 'Team B',
       selectionAllowance: 0
     },
     {
-      id: 3,
+      key: 'TC',
       title: 'Team C',
       selectionAllowance: 1
     },
     {
-      id: 4,
+      key: 'Tx',
       title: 'Team still Empty',
       selectionAllowance: 0
     }
@@ -42,39 +42,39 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
 
   private subOptions: ISuboption[] = [
     {
-      id: 1,
+      key: '1',
       title: 'John Blue',
-      parentId: 1
+      parentKey: 'TA'
     },
     {
-      id: 2,
+      key: '2',
       title: 'Marry Green',
-      parentId: 1
+      parentKey: 'TA'
     },
     {
-      id: 3,
+      key: '3',
       title: 'Mark Red',
-      parentId: 1
+      parentKey: 'TA'
     },
     {
-      id: 4,
+      key: '4',
       title: 'Anna White',
-      parentId: 3
+      parentKey: 'TC'
     },
     {
-      id: 5,
+      key: '5',
       title: 'Ellen Rose',
-      parentId: 3
+      parentKey: 'TC'
     },
     {
-      id: 6,
+      key: '6',
       title: 'Daniel Black',
-      parentId: 2
+      parentKey: 'TB'
     },
     {
-      id: 7,
+      key: '7',
       title: 'Paul Purple',
-      parentId: 2
+      parentKey: 'TB'
     }
   ];
 
@@ -99,16 +99,16 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
               <h2>Teams and Personal Selected</h2>
               <ul>
                 {this.state.selectedMainOptions.map(option => (
-                  <li key={option.id}>
-                    {escape(option.title)} ({escape(option.id.toString())})
+                  <li key={option.key}>
+                    {escape(option.title)} ({escape(option.key.toString())})
                   </li>
                 ))}
               </ul>
               <ul>
                 {this.state.selectedSubOptions.map(option => (
-                  <li key={option.id}>
-                    {escape(option.title)} ({escape(option.id.toString())}, parent option:{' '}
-                    {escape(option.parentId.toString())})
+                  <li key={option.key}>
+                    {escape(option.title)} ({escape(option.key.toString())}, parent option:{' '}
+                    {escape(option.parentKey.toString())})
                   </li>
                 ))}
               </ul>

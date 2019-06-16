@@ -10,13 +10,13 @@ export class RelationMap implements IRelationMap {
   public initializeRelations(): void {
     this.parentChildMap = {};
     for (const parent of this.parents) {
-      const relatedChildren = this.children.filter(op => op.parentId === parent.id);
-      this.parentChildMap[parent.id] = relatedChildren;
+      const relatedChildren = this.children.filter(op => op.parentKey === parent.key);
+      this.parentChildMap[parent.key] = relatedChildren;
     }
   }
 
-  public getChildren(parentId: number): ISuboption[] {
-    let children = this.parentChildMap[parentId];
+  public getChildren(parentKey: string): ISuboption[] {
+    let children = this.parentChildMap[parentKey];
     if (children === undefined) {
       children = [];
     }

@@ -23,7 +23,7 @@ export default class OptionsEditor extends React.Component<IOptionsEditorProps, 
   }
 
   private onChange(comboOption: IComboBoxOption): void {
-    const selectedOptions = this.props.options.filter(op => op.id === comboOption.key);
+    const selectedOptions = this.props.options.filter(op => op.key === comboOption.key);
     if (selectedOptions.length > 0) {
       const selectedOption = selectedOptions[0];
       this.props.onChange(selectedOption);
@@ -37,7 +37,7 @@ export default class OptionsEditor extends React.Component<IOptionsEditorProps, 
   public defineComboOptions(): void {
     const comboOptions = this.props.options.map(option => {
       const comboOption: IComboBoxOption = {
-        key: option.id,
+        key: option.key,
         text: option.title
       };
       return comboOption;

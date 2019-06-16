@@ -1,4 +1,4 @@
 export interface IOptionItem {
-  id: number;
+  key: string;
   title: string;
 }

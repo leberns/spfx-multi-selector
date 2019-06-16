@@ -10,7 +10,7 @@ export default class MultiOptionsEditor extends React.Component<IMultiOptionsEdi
       <div className={styles.optionsArray}>
         {this.props.options.map(option => (
           <Checkbox
-            key={option.id}
+            key={option.key}
             label={option.title}
             onChange={(event: React.FormEvent<HTMLElement>, isChecked: boolean) =>
               this.props.onChange(isChecked, option)

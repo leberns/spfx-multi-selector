@@ -78,8 +78,8 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
       newSelectedMainOptions = [mainOption, ...this.state.selectedMainOptions];
       newSelectedSuboptions = this.state.selectedSuboptions;
     } else {
-      newSelectedMainOptions = this.state.selectedMainOptions.filter(op => op.id !== mainOption.id);
-      newSelectedSuboptions = this.clearRelatedSuboptions(mainOption.id);
+      newSelectedMainOptions = this.state.selectedMainOptions.filter(op => op.key !== mainOption.key);
+      newSelectedSuboptions = this.clearRelatedSuboptions(mainOption.key);
     }
 
     const hasMainOptionSelected = newSelectedMainOptions.length > 0;
@@ -91,11 +91,11 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
     });
   }
 
-  private clearRelatedSuboptions(parentId: number): ISuboption[] {
+  private clearRelatedSuboptions(parentKey: string): ISuboption[] {
     let newSelectedSuboptions = this.state.selectedSuboptions;
-    const relatedSuboptions = this.suboptionsMap.getChildren(parentId);
+    const relatedSuboptions = this.suboptionsMap.getChildren(parentKey);
     relatedSuboptions.forEach(relatedSuboption => {
-      newSelectedSuboptions = newSelectedSuboptions.filter(op => op.id === relatedSuboption.id);
+      newSelectedSuboptions = newSelectedSuboptions.filter(op => op.key === relatedSuboption.key);
     });
     return newSelectedSuboptions;
   }
@@ -109,7 +109,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
     if (isChecked) {
       newSelectedSuboptions = [suboption, ...selectedSuboptions];
     } else {
-      newSelectedSuboptions = selectedSuboptions.filter(op => op.id !== suboption.id);
+      newSelectedSuboptions = selectedSuboptions.filter(op => op.key !== suboption.key);
     }
 
     this.setState({
@@ -118,7 +118,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
   }
 
   private onSingleSuboptionChange(suboption: ISuboption): void {
-    const newSelectedSuboptions = this.clearRelatedSuboptions(suboption.parentId);
+    const newSelectedSuboptions = this.clearRelatedSuboptions(suboption.parentKey);
     this.updateSuboptionsState(true, suboption, newSelectedSuboptions);
   }
 
