@@ -1,4 +1,4 @@
-import { IOptionItem } from '../../../../interfaces/IOptionItem';
+import { IOptionItem } from '../../../interfaces/IOptionItem';
 
 export interface IMultiOptionsEditorProps {
   options: IOptionItem[];

@@ -4,7 +4,7 @@ import { escape } from '@microsoft/sp-lodash-subset';
 import styles from './SpFxMultiSelector.module.scss';
 import { ISpFxMultiSelectorProps } from './ISpFxMultiSelectorProps';
 import { ISpFxMultiSelectorState } from './ISpFxMultiSelectorState';
-import MultiSelector from './multiSelector/MultiSelector';
+import MultiSelector from '../../../commons/components/multiSelector/MultiSelector';
 import { IMainOption } from '../../../interfaces/IMainOption';
 import { ISuboption } from '../../../interfaces/ISuboption';
 

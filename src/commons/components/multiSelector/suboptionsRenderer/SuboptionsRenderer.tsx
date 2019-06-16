@@ -3,8 +3,8 @@ import { escape } from '@microsoft/sp-lodash-subset';
 
 import { ISuboptionsRendererProps } from './ISuboptionsRendererProps';
 import { SelectionAllowance } from '../../../../enums/SelectionAllowance';
-import MultiOptionsEditor from '../multiOptionsEditor/MultiOptionsEditor';
-import OptionsBoxEditor from '../optionsBoxEditor/OptionsBoxEditor';
+import MultiOptionsEditor from '../../multiOptionsEditor/MultiOptionsEditor';
+import OptionsBoxEditor from '../../optionsBoxEditor/OptionsBoxEditor';
 
 export default class SChildOptionsRenderer extends React.Component<ISuboptionsRendererProps, {}> {
   public render(): React.ReactElement<ISuboptionsRendererProps> {

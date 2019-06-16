@@ -2,9 +2,9 @@ import * as React from 'react';
 
 import { IParentsSuboptionsRendererProps } from './IParentsSuboptionsRendererProps';
 import { IParentsSuboptionsRendererState } from './IParentSuboptionsRendererState';
-import SChildOptionsRenderer from '../suboptionsRenderer/SuboptionsRenderer';
+import SuboptionsRenderer from '../suboptionsRenderer/SuboptionsRenderer';
 import { ISuboption } from '../../../../interfaces/ISuboption';
-import { OptionsComparer } from '../../../../commons/comparers/OptionsComparer';
+import { OptionsComparer } from '../../../comparers/OptionsComparer';
 
 export default class ParentsSuboptionsRenderer extends React.Component<
   IParentsSuboptionsRendererProps,
@@ -21,7 +21,7 @@ export default class ParentsSuboptionsRenderer extends React.Component<
     return (
       <div>
         {this.state.sortedMainOptions.map(mainOption => (
-          <SChildOptionsRenderer
+          <SuboptionsRenderer
             key={mainOption.key}
             mainOption={mainOption}
             relatedSuboptions={this.props.suboptionsMap.getChildren(mainOption.key)}

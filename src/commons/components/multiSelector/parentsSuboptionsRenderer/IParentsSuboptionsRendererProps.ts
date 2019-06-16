@@ -1,6 +1,6 @@
 import { IMainOption } from '../../../../interfaces/IMainOption';
 import { ISuboption } from '../../../../interfaces/ISuboption';
-import { IRelationMap } from '../../../../commons/relations/IRelationMap';
+import { IRelationMap } from '../../../relations/IRelationMap';
 
 export interface IParentsSuboptionsRendererProps {
   selectedMainOptions: IMainOption[];
