@@ -4,6 +4,6 @@ import { IMainOption } from '../../../../interfaces/IMainOption';
 export interface ISuboptionsProviderProps {
   selectedMainOptions: IMainOption[];
   suboptions: ISuboption[];
-  onUnlimitedSuboptionChange: (suboption: ISuboption, isChecked: boolean) => void;
-  onSingleSuboptionChange: (suboption: ISuboption, mainOption: IMainOption) => void;
+  onUnlimitedSuboptionChange: (isChecked: boolean, suboption: ISuboption) => void;
+  onSingleSuboptionChange: (mainOption: IMainOption, suboption: ISuboption) => void;
 }

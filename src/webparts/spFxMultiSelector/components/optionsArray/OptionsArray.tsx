@@ -13,7 +13,7 @@ export default class OptionsArray extends React.Component<IOptionsArrayProps, {}
             key={option.id}
             label={option.title}
             onChange={(event: React.FormEvent<HTMLElement>, isChecked: boolean) =>
-              this.props.onChange(option, isChecked)
+              this.props.onChange(isChecked, option)
             }
           />
         ))}

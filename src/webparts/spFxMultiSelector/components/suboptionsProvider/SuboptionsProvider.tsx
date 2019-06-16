@@ -3,7 +3,6 @@ import * as React from 'react';
 import { ISuboptionsProviderProps } from './ISuboptionsProviderProps';
 import { ISuboptionsProviderState } from './ISuboptionsProviderState';
 import SuboptionsRenderer from '../suboptionsRenderer/SuboptionsRenderer';
-import { IMainOption } from '../../../../interfaces/IMainOption';
 import { ISuboption } from '../../../../interfaces/ISuboption';
 
 export default class SuboptionsProvider extends React.Component<ISuboptionsProviderProps, ISuboptionsProviderState> {
@@ -22,11 +21,11 @@ export default class SuboptionsProvider extends React.Component<ISuboptionsProvi
             key={mainOption.id}
             mainOption={mainOption}
             relatedSuboptions={this.getRelatedSuboptions(mainOption.id)}
-            onUnlimitedSuboptionChange={(suboption: ISuboption, isChecked: boolean) =>
-              this.props.onUnlimitedSuboptionChange(suboption, isChecked)
+            onUnlimitedSuboptionChange={(isChecked: boolean, suboption: ISuboption) =>
+              this.props.onUnlimitedSuboptionChange(isChecked, suboption)
             }
             onSingleSuboptionChange={(suboption: ISuboption) =>
-              this.props.onSingleSuboptionChange(suboption, mainOption)
+              this.props.onSingleSuboptionChange(mainOption, suboption)
             }
           />
         ))}
