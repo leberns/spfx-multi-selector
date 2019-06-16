@@ -13,7 +13,7 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
     super(props);
     this.state = {
       selectedMainOptions: [],
-      selectedSubOptions: []
+      selectedSuboptions: []
     };
   }
 
@@ -40,7 +40,7 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
     }
   ];
 
-  private subOptions: ISuboption[] = [
+  private suboptions: ISuboption[] = [
     {
       key: '1',
       title: 'John Blue',
@@ -87,7 +87,7 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
               <h2>Personal Available</h2>
               <MultiSelector
                 mainOptions={this.mainOptions}
-                suboptions={this.subOptions}
+                suboptions={this.suboptions}
                 onSelectionComplete={(selectedMainOptions: IMainOption[], selectedSubOptions: ISuboption[]) =>
                   this.onSelectionComplete(selectedMainOptions, selectedSubOptions)
                 }
@@ -105,9 +105,9 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
                 ))}
               </ul>
               <ul>
-                {this.state.selectedSubOptions.map(option => (
+                {this.state.selectedSuboptions.map(option => (
                   <li key={option.key}>
-                    {escape(option.title)} ({escape(option.key)}, team: {escape(option.parentKey.toString())})
+                    {escape(option.title)} ({escape(option.key)}, team: {escape(option.parentKey)})
                   </li>
                 ))}
               </ul>
@@ -118,10 +118,10 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
     );
   }
 
-  private onSelectionComplete(selectedMainOptions: IMainOption[], selectedSubOptions: ISuboption[]): void {
+  private onSelectionComplete(selectedMainOptions: IMainOption[], selectedSuboptions: ISuboption[]): void {
     this.setState({
       selectedMainOptions: [...selectedMainOptions],
-      selectedSubOptions: [...selectedSubOptions]
+      selectedSuboptions: [...selectedSuboptions]
     });
   }
 }
