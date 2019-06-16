@@ -2,10 +2,10 @@ import * as React from 'react';
 import { Checkbox } from 'office-ui-fabric-react';
 
 import styles from './OptionsArray.module.scss';
-import { IOptionsArrayProps } from './IOptionsArrayProps';
+import { IMultiOptionsEditorProps } from './IMultiOptionsEditorProps';
 
-export default class OptionsArray extends React.Component<IOptionsArrayProps, {}> {
-  public render(): React.ReactElement<IOptionsArrayProps> {
+export default class MultiOptionsEditor extends React.Component<IMultiOptionsEditorProps, {}> {
+  public render(): React.ReactElement<IMultiOptionsEditorProps> {
     return (
       <div className={styles.optionsArray}>
         {this.props.options.map(option => (

@@ -3,8 +3,8 @@ import { escape } from '@microsoft/sp-lodash-subset';
 
 import { IChildOptionsRendererProps } from './IChildOptionsRendererProps';
 import { SelectionAllowance } from '../../../../enums/SelectionAllowance';
-import OptionsArray from '../optionsArray/OptionsArray';
-import OptionsBox from '../optionsBox/OptionsBox';
+import MultiOptionsEditor from '../multiOptionsEditor/MultiOptionsEditor';
+import OptionsEditor from '../optionsEditor/OptionsEditor';
 
 export default class ChildOptionsRenderer extends React.Component<IChildOptionsRendererProps, {}> {
   public render(): React.ReactElement<IChildOptionsRendererProps> {
@@ -18,9 +18,9 @@ export default class ChildOptionsRenderer extends React.Component<IChildOptionsR
       <div>
         <div>{escape(title)}</div>
         {selectionAllowance === SelectionAllowance.Unlimited ? (
-          <OptionsArray options={this.props.relatedSuboptions} onChange={this.props.onUnlimitedSuboptionChange} />
+          <MultiOptionsEditor options={this.props.relatedSuboptions} onChange={this.props.onUnlimitedSuboptionChange} />
         ) : (
-          <OptionsBox options={this.props.relatedSuboptions} onChange={this.props.onSingleSuboptionChange} />
+          <OptionsEditor options={this.props.relatedSuboptions} onChange={this.props.onSingleSuboptionChange} />
         )}
       </div>
     );

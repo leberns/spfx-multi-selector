@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { PrimaryButton } from 'office-ui-fabric-react';
 
-import OptionsArray from '../optionsArray/OptionsArray';
+import MultiOptionsEditor from '../multiOptionsEditor/MultiOptionsEditor';
 import styles from './MultiSelector.module.scss';
 import { IMultiSelectorProps } from './IMultiSelectorProps';
 import { IMultiSelectorState } from './IMultiSelectorState';
@@ -32,7 +32,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
       <div className={styles.multiSelector}>
         <div className={styles.row}>
           <div className={styles.halfColumns}>
-            <OptionsArray
+            <MultiOptionsEditor
               options={this.props.mainOptions}
               onChange={(isChecked: boolean, option: IMainOption) => this.onMainOptionChange(isChecked, option)}
             />

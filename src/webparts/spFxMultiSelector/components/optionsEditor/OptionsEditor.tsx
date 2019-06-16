@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { ComboBox, IComboBoxOption, IComboBox } from 'office-ui-fabric-react';
 
-import { IOptionsBoxProps } from './IOptionsBoxProps';
-import { IOptionsBoxState } from './IOptionsBoxState';
+import { IOptionsEditorProps } from './IOptionsEditorProps';
+import { IOptionsEditorState } from './IOptionsEditorState';
 
-export default class OptionsBox extends React.Component<IOptionsBoxProps, IOptionsBoxState> {
-  constructor(props: IOptionsBoxProps) {
+export default class OptionsEditor extends React.Component<IOptionsEditorProps, IOptionsEditorState> {
+  constructor(props: IOptionsEditorProps) {
     super(props);
     this.state = {
       comboOptions: []
     };
   }
 
-  public render(): React.ReactElement<IOptionsBoxProps> {
+  public render(): React.ReactElement<IOptionsEditorProps> {
     return (
       <ComboBox
         autoComplete="on"
