@@ -7,15 +7,13 @@ import { ISuboption } from '../../../../interfaces/ISuboption';
 export default class SuboptionsRenderer extends React.Component<ISuboptionsRendererProps, {}> {
   constructor(props: ISuboptionsRendererProps) {
     super(props);
-    this.state = {
-      mainOptionsSuboptions: []
-    };
   }
 
   public render(): React.ReactElement<ISuboptionsRendererProps> {
+    const sortedMainOptions = this.props.selectedMainOptions.sort((a, b) => (a.title > b.title ? 1 : -1));
     return (
       <div>
-        {this.props.selectedMainOptions.map(mainOption => (
+        {sortedMainOptions.map(mainOption => (
           <ChildOptionsRenderer
             key={mainOption.key}
             mainOption={mainOption}
