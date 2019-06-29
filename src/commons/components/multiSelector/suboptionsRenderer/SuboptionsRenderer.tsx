@@ -6,7 +6,7 @@ import { SelectionAllowance } from '../../../../enums/SelectionAllowance';
 import MultiOptionsEditor from '../../multiOptionsEditor/MultiOptionsEditor';
 import OptionsBoxEditor from '../../optionsBoxEditor/OptionsBoxEditor';
 
-export default class SChildOptionsRenderer extends React.Component<ISuboptionsRendererProps, {}> {
+export default class SuboptionsRenderer extends React.Component<ISuboptionsRendererProps, {}> {
   public render(): React.ReactElement<ISuboptionsRendererProps> {
     if (this.props.relatedSuboptions.length === 0) {
       return null;
