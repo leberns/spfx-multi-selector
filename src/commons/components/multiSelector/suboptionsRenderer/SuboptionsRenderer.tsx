@@ -5,24 +5,23 @@ import { ISuboptionsRendererState } from './ISuboptionsRendererState';
 import OptionsRenderer from '../optionsRenderer/OptionsRenderer';
 import { IOptionItem } from '../../../../interfaces/IOptionItem';
 import { OptionsComparer } from '../../../comparers/OptionsComparer';
-import { IOptionsRendererProps } from '../optionsRenderer/IOptionsRendererProps';
 
 export default class SuboptionsRenderer extends React.Component<ISuboptionsRendererProps, ISuboptionsRendererState> {
   constructor(props: ISuboptionsRendererProps) {
     super(props);
     this.state = {
-      sortedMainOptions: []
+      sortedParentOptions: []
     };
   }
 
   public render(): React.ReactElement<ISuboptionsRendererProps> {
     return (
       <div>
-        {this.state.sortedMainOptions.map(mainOption => (
+        {this.state.sortedParentOptions.map(mainOption => (
           <OptionsRenderer
             key={mainOption.key}
-            mainOption={mainOption}
-            relatedSuboptions={this.props.suboptionsMap.getChildren(mainOption.key)}
+            parentOption={mainOption}
+            suboptions={this.props.suboptionsMap.getChildren(mainOption.key)}
             onUnlimitedSuboptionChange={(isChecked: boolean, suboption: IOptionItem) =>
               this.props.onUnlimitedSuboptionChange(isChecked, suboption)
             }
@@ -38,16 +37,16 @@ export default class SuboptionsRenderer extends React.Component<ISuboptionsRende
   }
 
   public componentDidUpdate(prevProps: ISuboptionsRendererProps): void {
-    if (this.props.selectedOptionsLevel2.length !== prevProps.selectedOptionsLevel2.length) {
+    if (this.props.selectedParentOptions.length !== prevProps.selectedParentOptions.length) {
       this.sortOptionsUpdateState();
     }
   }
 
   public sortOptionsUpdateState(): void {
     const comparer = new OptionsComparer();
-    const sortedMainOptions = this.props.selectedOptionsLevel2.sort((a, b) => comparer.compare(a, b));
+    const sortedParentOptions = this.props.selectedParentOptions.sort((a, b) => comparer.compare(a, b));
     this.setState({
-      sortedMainOptions
+      sortedParentOptions
     });
   }
 }

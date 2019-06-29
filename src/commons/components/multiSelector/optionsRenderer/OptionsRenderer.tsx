@@ -8,19 +8,19 @@ import OptionsBoxEditor from '../../optionsBoxEditor/OptionsBoxEditor';
 
 export default class OptionsRenderer extends React.Component<IOptionsRendererProps, {}> {
   public render(): React.ReactElement<IOptionsRendererProps> {
-    if (this.props.relatedSuboptions.length === 0) {
+    if (this.props.suboptions.length === 0) {
       return null;
     }
 
-    const { title, selectionAllowance } = this.props.mainOption;
+    const { title, selectionAllowance } = this.props.parentOption;
 
     return (
       <div>
         <div>{escape(title)}</div>
         {selectionAllowance === SelectionAllowance.Unlimited ? (
-          <MultiOptionsEditor options={this.props.relatedSuboptions} onChange={this.props.onUnlimitedSuboptionChange} />
+          <MultiOptionsEditor options={this.props.suboptions} onChange={this.props.onUnlimitedSuboptionChange} />
         ) : (
-          <OptionsBoxEditor options={this.props.relatedSuboptions} onChange={this.props.onSingleSuboptionChange} />
+          <OptionsBoxEditor options={this.props.suboptions} onChange={this.props.onSingleSuboptionChange} />
         )}
       </div>
     );

@@ -5,7 +5,7 @@ import MultiOptionsEditor from '../multiOptionsEditor/MultiOptionsEditor';
 import styles from './MultiSelector.module.scss';
 import { IMultiSelectorProps } from './IMultiSelectorProps';
 import { IMultiSelectorState } from './IMultiSelectorState';
-import ParentsSuboptionsRenderer from './suboptionsRenderer/SuboptionsRenderer';
+import SuboptionsRenderer from './suboptionsRenderer/SuboptionsRenderer';
 import { RelationMap } from '../../relations/RelationMap';
 import { IRelationMap } from '../../relations/IRelationMap';
 import { OptionsComparer } from '../../comparers/OptionsComparer';
@@ -37,9 +37,9 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
             />
           </div>
           <div className={styles.halfColumns}>
-            <ParentsSuboptionsRenderer
-              selectedOptionsLevel2={this.state.selectedOptionsLevel2}
-              optionsLevel3={this.props.optionsLevel3}
+            <SuboptionsRenderer
+              selectedParentOptions={this.state.selectedOptionsLevel2}
+              suboptions={this.props.optionsLevel3}
               suboptionsMap={this.suboptionsMap}
               onUnlimitedSuboptionChange={(isChecked: boolean, suboption: IOptionItem) =>
                 this.onUnlimitedSuboptionChange(isChecked, suboption)
@@ -115,7 +115,11 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
     this.updateSuboptionsState(isChecked, suboption, this.state.selectedOptionsLevel3);
   }
 
-  private updateSuboptionsState(isChecked: boolean, suboption: IOptionItem, selectedOptionsLevel3: IOptionItem[]): void {
+  private updateSuboptionsState(
+    isChecked: boolean,
+    suboption: IOptionItem,
+    selectedOptionsLevel3: IOptionItem[]
+  ): void {
     let newSelectedSuboptions: IOptionItem[];
     if (isChecked) {
       newSelectedSuboptions = [suboption, ...selectedOptionsLevel3];
