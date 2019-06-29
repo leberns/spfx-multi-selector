@@ -5,19 +5,18 @@ import styles from './SpFxMultiSelector.module.scss';
 import { ISpFxMultiSelectorProps } from './ISpFxMultiSelectorProps';
 import { ISpFxMultiSelectorState } from './ISpFxMultiSelectorState';
 import MultiSelector from '../../../commons/components/multiSelector/MultiSelector';
-import { IMainOption } from '../../../interfaces/IMainOption';
-import { ISuboption } from '../../../interfaces/ISuboption';
+import { IOptionItem } from '../../../interfaces/IOptionItem';
 
 export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelectorProps, ISpFxMultiSelectorState> {
   constructor(props: ISpFxMultiSelectorProps) {
     super(props);
     this.state = {
-      selectedMainOptions: [],
-      selectedSuboptions: []
+      selectedOptionsLevel2: [],
+      selectedOptionsLevel3: []
     };
   }
 
-  private mainOptions: IMainOption[] = [
+  private optionsLevel2: IOptionItem[] = [
     {
       key: 'TA',
       title: 'Team A',
@@ -40,7 +39,7 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
     }
   ];
 
-  private suboptions: ISuboption[] = [
+  private optionsLevel3: IOptionItem[] = [
     {
       key: '1',
       title: 'John Blue',
@@ -86,10 +85,10 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
             <div className={styles.column}>
               <h2>Personal Available</h2>
               <MultiSelector
-                mainOptions={this.mainOptions}
-                suboptions={this.suboptions}
-                onSelectionComplete={(selectedMainOptions: IMainOption[], selectedSubOptions: ISuboption[]) =>
-                  this.onSelectionComplete(selectedMainOptions, selectedSubOptions)
+                optionsLevel2={this.optionsLevel2}
+                optionsLevel3={this.optionsLevel3}
+                onSelectionComplete={(selectedOptionsLevel2: IOptionItem[], selectedSubOptions: IOptionItem[]) =>
+                  this.onSelectionComplete(selectedOptionsLevel2, selectedSubOptions)
                 }
               />
             </div>
@@ -98,14 +97,14 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
             <div className={styles.column}>
               <h2>Teams and Personal Selected</h2>
               <ul>
-                {this.state.selectedMainOptions.map(option => (
+                {this.state.selectedOptionsLevel2.map(option => (
                   <li key={option.key}>
                     {escape(option.title)} ({escape(option.key)})
                   </li>
                 ))}
               </ul>
               <ul>
-                {this.state.selectedSuboptions.map(option => (
+                {this.state.selectedOptionsLevel3.map(option => (
                   <li key={option.key}>
                     {escape(option.title)} ({escape(option.key)}, team: {escape(option.parentKey)})
                   </li>
@@ -118,10 +117,10 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
     );
   }
 
-  private onSelectionComplete(selectedMainOptions: IMainOption[], selectedSuboptions: ISuboption[]): void {
+  private onSelectionComplete(selectedOptionsLevel2: IOptionItem[], selectedOptionsLevel3: IOptionItem[]): void {
     this.setState({
-      selectedMainOptions: [...selectedMainOptions],
-      selectedSuboptions: [...selectedSuboptions]
+      selectedOptionsLevel2: [...selectedOptionsLevel2],
+      selectedOptionsLevel3: [...selectedOptionsLevel3]
     });
   }
 }

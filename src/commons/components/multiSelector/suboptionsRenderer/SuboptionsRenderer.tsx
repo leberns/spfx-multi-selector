@@ -1,28 +1,53 @@
 import * as React from 'react';
-import { escape } from '@microsoft/sp-lodash-subset';
 
 import { ISuboptionsRendererProps } from './ISuboptionsRendererProps';
-import { SelectionAllowance } from '../../../../enums/SelectionAllowance';
-import MultiOptionsEditor from '../../multiOptionsEditor/MultiOptionsEditor';
-import OptionsBoxEditor from '../../optionsBoxEditor/OptionsBoxEditor';
+import { ISuboptionsRendererState } from './ISuboptionsRendererState';
+import OptionsRenderer from '../optionsRenderer/OptionsRenderer';
+import { IOptionItem } from '../../../../interfaces/IOptionItem';
+import { OptionsComparer } from '../../../comparers/OptionsComparer';
+import { IOptionsRendererProps } from '../optionsRenderer/IOptionsRendererProps';
 
-export default class SuboptionsRenderer extends React.Component<ISuboptionsRendererProps, {}> {
+export default class SuboptionsRenderer extends React.Component<ISuboptionsRendererProps, ISuboptionsRendererState> {
+  constructor(props: ISuboptionsRendererProps) {
+    super(props);
+    this.state = {
+      sortedMainOptions: []
+    };
+  }
+
   public render(): React.ReactElement<ISuboptionsRendererProps> {
-    if (this.props.relatedSuboptions.length === 0) {
-      return null;
-    }
-
-    const { title, selectionAllowance } = this.props.mainOption;
-
     return (
       <div>
-        <div>{escape(title)}</div>
-        {selectionAllowance === SelectionAllowance.Unlimited ? (
-          <MultiOptionsEditor options={this.props.relatedSuboptions} onChange={this.props.onUnlimitedSuboptionChange} />
-        ) : (
-          <OptionsBoxEditor options={this.props.relatedSuboptions} onChange={this.props.onSingleSuboptionChange} />
-        )}
+        {this.state.sortedMainOptions.map(mainOption => (
+          <OptionsRenderer
+            key={mainOption.key}
+            mainOption={mainOption}
+            relatedSuboptions={this.props.suboptionsMap.getChildren(mainOption.key)}
+            onUnlimitedSuboptionChange={(isChecked: boolean, suboption: IOptionItem) =>
+              this.props.onUnlimitedSuboptionChange(isChecked, suboption)
+            }
+            onSingleSuboptionChange={(suboption: IOptionItem) => this.props.onSingleSuboptionChange(suboption)}
+          />
+        ))}
       </div>
     );
+  }
+
+  public componentDidMount(): void {
+    this.sortOptionsUpdateState();
+  }
+
+  public componentDidUpdate(prevProps: ISuboptionsRendererProps): void {
+    if (this.props.selectedOptionsLevel2.length !== prevProps.selectedOptionsLevel2.length) {
+      this.sortOptionsUpdateState();
+    }
+  }
+
+  public sortOptionsUpdateState(): void {
+    const comparer = new OptionsComparer();
+    const sortedMainOptions = this.props.selectedOptionsLevel2.sort((a, b) => comparer.compare(a, b));
+    this.setState({
+      sortedMainOptions
+    });
   }
 }

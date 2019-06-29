@@ -1,9 +1,8 @@
-import { IMainOption } from '../../../interfaces/IMainOption';
-import { ISuboption } from '../../../interfaces/ISuboption';
+import { IOptionItem } from '../../../interfaces/IOptionItem';
 
 export interface IMultiSelectorState {
-  mainOptions: IMainOption[];
-  selectedMainOptions: IMainOption[];
-  selectedSuboptions: ISuboption[];
-  hasMainOptionSelected: boolean;
+  optionsLevel2: IOptionItem[];
+  selectedOptionsLevel2: IOptionItem[];
+  selectedOptionsLevel3: IOptionItem[];
+  hasOptionSelected: boolean;
 }
