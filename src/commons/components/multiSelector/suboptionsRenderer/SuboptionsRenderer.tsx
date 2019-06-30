@@ -22,14 +22,26 @@ export default class SuboptionsRenderer extends React.Component<ISuboptionsRende
             key={mainOption.key}
             parentOption={mainOption}
             suboptions={this.props.suboptionsMap.getChildren(mainOption.key)}
-            onUnlimitedSuboptionChange={(isChecked: boolean, suboption: IOptionItem) =>
-              this.props.onUnlimitedSuboptionChange(isChecked, suboption)
+            onUnlimitedOptionChange={(isChecked: boolean, option: IOptionItem) =>
+              this.onUnlimitedOptionChange(isChecked, option)
             }
-            onSingleSuboptionChange={(suboption: IOptionItem) => this.props.onSingleSuboptionChange(suboption)}
+            onSingleOptionChange={(option: IOptionItem) => this.onSingleOptionChange(option)}
           />
         ))}
       </div>
     );
+  }
+
+  private onUnlimitedOptionChange(isChecked: boolean, option: IOptionItem): void {
+    if (!!this.props.onUnlimitedOptionChange) {
+      this.props.onUnlimitedOptionChange(isChecked, option);
+    }
+  }
+
+  private onSingleOptionChange(option: IOptionItem): void {
+    if (!!this.props.onSingleOptionChange) {
+      this.props.onSingleOptionChange(option);
+    }
   }
 
   public componentDidMount(): void {

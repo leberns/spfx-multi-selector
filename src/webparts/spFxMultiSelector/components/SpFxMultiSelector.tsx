@@ -6,36 +6,66 @@ import { ISpFxMultiSelectorProps } from './ISpFxMultiSelectorProps';
 import { ISpFxMultiSelectorState } from './ISpFxMultiSelectorState';
 import MultiSelector from '../../../commons/components/multiSelector/MultiSelector';
 import { IOptionItem } from '../../../interfaces/IOptionItem';
+import { SelectionAllowance } from '../../../enums/SelectionAllowance';
 
 export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelectorProps, ISpFxMultiSelectorState> {
   constructor(props: ISpFxMultiSelectorProps) {
     super(props);
     this.state = {
+      selectedOptionsLevel1: [],
       selectedOptionsLevel2: [],
       selectedOptionsLevel3: []
     };
   }
 
+  private optionsLevel1: IOptionItem[] = [
+    {
+      key: 'Department-1',
+      title: 'Department 1',
+      selectionAllowance: SelectionAllowance.Unlimited
+    },
+    {
+      key: 'Department-2',
+      title: 'Department 2',
+      selectionAllowance: SelectionAllowance.Unlimited
+    },
+    {
+      key: 'Department-3',
+      title: 'Department 3',
+      selectionAllowance: SelectionAllowance.Unlimited
+    }
+  ];
+
   private optionsLevel2: IOptionItem[] = [
     {
       key: 'TA',
       title: 'Team A',
-      selectionAllowance: 0
+      selectionAllowance: SelectionAllowance.Unlimited,
+      parentKey: 'Department-1'
     },
     {
       key: 'TC',
       title: 'Team C',
-      selectionAllowance: 0
+      selectionAllowance: SelectionAllowance.Unlimited,
+      parentKey: 'Department-2'
     },
     {
       key: 'TB',
       title: 'Team B',
-      selectionAllowance: 1
+      selectionAllowance: SelectionAllowance.Single,
+      parentKey: 'Department-1'
     },
     {
-      key: 'Tx',
-      title: 'Team still Empty',
-      selectionAllowance: 0
+      key: 'TE1',
+      title: 'Team Empty 1',
+      selectionAllowance: SelectionAllowance.Unlimited,
+      parentKey: 'Department-3'
+    },
+    {
+      key: 'TE2',
+      title: 'Team Empty 2',
+      selectionAllowance: SelectionAllowance.Unlimited,
+      parentKey: 'Department-2'
     }
   ];
 
@@ -85,17 +115,27 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
             <div className={styles.column}>
               <h2>Personal Available</h2>
               <MultiSelector
+                optionsLevel1={this.optionsLevel1}
                 optionsLevel2={this.optionsLevel2}
                 optionsLevel3={this.optionsLevel3}
-                onSelectionComplete={(selectedOptionsLevel2: IOptionItem[], selectedSubOptions: IOptionItem[]) =>
-                  this.onSelectionComplete(selectedOptionsLevel2, selectedSubOptions)
-                }
+                onSelectionComplete={(
+                  selectedOptionsLevel1: IOptionItem[],
+                  selectedOptionsLevel2: IOptionItem[],
+                  selectedOptionsLevel3: IOptionItem[]
+                ) => this.onSelectionComplete(selectedOptionsLevel1, selectedOptionsLevel2, selectedOptionsLevel3)}
               />
             </div>
           </div>
           <div className={styles.row}>
             <div className={styles.column}>
-              <h2>Teams and Personal Selected</h2>
+              <h2>Selected</h2>
+              <ul>
+                {this.state.selectedOptionsLevel1.map(option => (
+                  <li key={option.key}>
+                    {escape(option.title)} ({escape(option.key)})
+                  </li>
+                ))}
+              </ul>
               <ul>
                 {this.state.selectedOptionsLevel2.map(option => (
                   <li key={option.key}>
@@ -117,8 +157,13 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
     );
   }
 
-  private onSelectionComplete(selectedOptionsLevel2: IOptionItem[], selectedOptionsLevel3: IOptionItem[]): void {
+  private onSelectionComplete(
+    selectedOptionsLevel1: IOptionItem[],
+    selectedOptionsLevel2: IOptionItem[],
+    selectedOptionsLevel3: IOptionItem[]
+  ): void {
     this.setState({
+      selectedOptionsLevel1: [...selectedOptionsLevel1],
       selectedOptionsLevel2: [...selectedOptionsLevel2],
       selectedOptionsLevel3: [...selectedOptionsLevel3]
     });

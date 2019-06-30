@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { PrimaryButton } from 'office-ui-fabric-react';
 
-import MultiOptionsEditor from '../multiOptionsEditor/MultiOptionsEditor';
 import styles from './MultiSelector.module.scss';
 import { IMultiSelectorProps } from './IMultiSelectorProps';
 import { IMultiSelectorState } from './IMultiSelectorState';
+import MultiOptionsEditor from '../multiOptionsEditor/MultiOptionsEditor';
 import SuboptionsRenderer from './suboptionsRenderer/SuboptionsRenderer';
 import { RelationMap } from '../../relations/RelationMap';
 import { IRelationMap } from '../../relations/IRelationMap';
@@ -12,12 +12,15 @@ import { OptionsComparer } from '../../comparers/OptionsComparer';
 import { IOptionItem } from '../../../interfaces/IOptionItem';
 
 export default class MultiSelector extends React.Component<IMultiSelectorProps, IMultiSelectorState> {
-  private suboptionsMap: IRelationMap;
+  private suboptionsMap12: IRelationMap;
+  private suboptionsMap23: IRelationMap;
 
   constructor(props: IMultiSelectorProps) {
     super(props);
     this.state = {
       optionsLevel2: this.props.optionsLevel2,
+      optionsLevel3: this.props.optionsLevel3,
+      selectedOptionsLevel1: [],
       selectedOptionsLevel2: [],
       selectedOptionsLevel3: [],
       hasOptionSelected: false
@@ -26,31 +29,40 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
 
   public render(): React.ReactElement<IMultiSelectorProps> {
     const allowComplete = !this.state.hasOptionSelected;
-    const completeLabel = 'Select';
     return (
       <div className={styles.multiSelector}>
         <div className={styles.row}>
-          <div className={styles.halfColumns}>
+          <div className={styles.selectorColumns}>
             <MultiOptionsEditor
-              options={this.state.optionsLevel2}
-              onChange={(isChecked: boolean, option: IOptionItem) => this.onMainOptionChange(isChecked, option)}
+              options={this.props.optionsLevel1}
+              onChange={(isChecked: boolean, option: IOptionItem) => this.onOptionChange1(isChecked, option)}
             />
           </div>
-          <div className={styles.halfColumns}>
+          <div className={styles.selectorColumns}>
+            <SuboptionsRenderer
+              selectedParentOptions={this.state.selectedOptionsLevel1}
+              suboptions={this.state.optionsLevel2}
+              suboptionsMap={this.suboptionsMap12}
+              onUnlimitedOptionChange={(isChecked: boolean, suboption: IOptionItem) =>
+                this.onUnlimitedOptionChange2(isChecked, suboption, this.state.selectedOptionsLevel2)
+              }
+            />
+          </div>
+          <div className={styles.selectorColumns}>
             <SuboptionsRenderer
               selectedParentOptions={this.state.selectedOptionsLevel2}
               suboptions={this.props.optionsLevel3}
-              suboptionsMap={this.suboptionsMap}
-              onUnlimitedSuboptionChange={(isChecked: boolean, suboption: IOptionItem) =>
-                this.onUnlimitedSuboptionChange(isChecked, suboption)
+              suboptionsMap={this.suboptionsMap23}
+              onUnlimitedOptionChange={(isChecked: boolean, suboption: IOptionItem) =>
+                this.onUnlimitedOptionChange3(isChecked, suboption, this.state.selectedOptionsLevel3)
               }
-              onSingleSuboptionChange={(suboption: IOptionItem) => this.onSingleSuboptionChange(suboption)}
+              onSingleOptionChange={(suboption: IOptionItem) => this.onSingleOptionChange3(suboption)}
             />
           </div>
         </div>
         <div className={styles.row}>
           <div className={styles.column}>
-            <PrimaryButton disabled={allowComplete} text={completeLabel} onClick={() => this.onSelectionComplete()} />
+            <PrimaryButton disabled={allowComplete} text="Select" onClick={() => this.onSelectionComplete()} />
           </div>
         </div>
       </div>
@@ -59,85 +71,112 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
 
   public componentDidMount(): void {
     this.initializeSuboptionsMap();
-    this.sortOptionsUpdateState();
+    this.setStateWithSortedOptions();
   }
 
   public componentDidUpdate(prevProps: IMultiSelectorProps): void {
     this.initializeSuboptionsMap();
     if (this.props.optionsLevel2.length !== prevProps.optionsLevel2.length) {
-      this.sortOptionsUpdateState();
+      this.setStateWithSortedOptions();
     }
   }
 
   private initializeSuboptionsMap(): void {
-    this.suboptionsMap = new RelationMap(this.props.optionsLevel2, this.props.optionsLevel3);
-    this.suboptionsMap.initializeRelations();
+    this.suboptionsMap12 = new RelationMap(this.props.optionsLevel1, this.props.optionsLevel2);
+    this.suboptionsMap12.initializeRelations();
+    this.suboptionsMap23 = new RelationMap(this.props.optionsLevel2, this.props.optionsLevel3);
+    this.suboptionsMap23.initializeRelations();
   }
 
-  public sortOptionsUpdateState(): void {
+  public setStateWithSortedOptions(): void {
     const comparer = new OptionsComparer();
-    const sortedMainOptions = this.props.optionsLevel2.sort((a, b) => comparer.compare(a, b));
+    const optionsLevel2 = this.props.optionsLevel2.sort((a, b) => comparer.compare(a, b));
     this.setState({
-      optionsLevel2: sortedMainOptions
+      optionsLevel2
+    });
+    const optionsLevel3 = this.props.optionsLevel3.sort((a, b) => comparer.compare(a, b));
+    this.setState({
+      optionsLevel3
     });
   }
 
-  private onMainOptionChange(isChecked: boolean, mainOption: IOptionItem): void {
-    let newSelectedMainOptions: IOptionItem[];
-    let newSelectedSuboptions: IOptionItem[];
+  private onOptionChange1(isChecked: boolean, optionLevel1: IOptionItem): void {
     if (isChecked) {
-      newSelectedMainOptions = [mainOption, ...this.state.selectedOptionsLevel2];
-      newSelectedSuboptions = this.state.selectedOptionsLevel3;
-    } else {
-      newSelectedMainOptions = this.state.selectedOptionsLevel2.filter(op => op.key !== mainOption.key);
-      newSelectedSuboptions = this.clearRelatedSuboptions(mainOption.key);
+      const newSelectedOptionsLevel1 = [optionLevel1, ...this.state.selectedOptionsLevel1];
+      this.setState({
+        selectedOptionsLevel1: newSelectedOptionsLevel1
+      });
+      return;
     }
 
-    const hasOptionSelected = newSelectedMainOptions.length > 0;
-
+    const selectedOptionsLevel1 = this.state.selectedOptionsLevel1.filter(op => op.key !== optionLevel1.key);
+    const selectedOptionsLevel2 = this.clearRelatedSuboptions(
+      optionLevel1.key,
+      this.state.selectedOptionsLevel2,
+      this.suboptionsMap12
+    );
     this.setState({
-      selectedOptionsLevel2: newSelectedMainOptions,
-      hasOptionSelected,
-      selectedOptionsLevel3: newSelectedSuboptions
+      selectedOptionsLevel1,
+      selectedOptionsLevel2
     });
   }
 
-  private clearRelatedSuboptions(parentKey: string): IOptionItem[] {
-    let newSelectedSuboptions = this.state.selectedOptionsLevel3;
-    const relatedSuboptions = this.suboptionsMap.getChildren(parentKey);
+  private clearRelatedSuboptions(
+    parentKey: string,
+    options: IOptionItem[],
+    suboptionsMap: IRelationMap
+  ): IOptionItem[] {
+    let newSelectedSuboptions: IOptionItem[];
+    const relatedSuboptions = suboptionsMap.getChildren(parentKey);
     relatedSuboptions.forEach(relatedSuboption => {
-      newSelectedSuboptions = newSelectedSuboptions.filter(op => op.key !== relatedSuboption.key);
+      newSelectedSuboptions = options.filter(op => op.key !== relatedSuboption.key);
     });
     return newSelectedSuboptions;
   }
 
-  private onUnlimitedSuboptionChange(isChecked: boolean, suboption: IOptionItem): void {
-    this.updateSuboptionsState(isChecked, suboption, this.state.selectedOptionsLevel3);
-  }
-
-  private updateSuboptionsState(
-    isChecked: boolean,
-    suboption: IOptionItem,
-    selectedOptionsLevel3: IOptionItem[]
-  ): void {
-    let newSelectedSuboptions: IOptionItem[];
-    if (isChecked) {
-      newSelectedSuboptions = [suboption, ...selectedOptionsLevel3];
-    } else {
-      newSelectedSuboptions = selectedOptionsLevel3.filter(op => op.key !== suboption.key);
-    }
-
+  private onUnlimitedOptionChange2(isChecked: boolean, option: IOptionItem, selectedOptions: IOptionItem[]): void {
+    const selectedOptionsLevel2 = this.updateOptions(isChecked, option, selectedOptions);
+    const hasOptionSelected = selectedOptionsLevel2.length > 0;
     this.setState({
-      selectedOptionsLevel3: newSelectedSuboptions
+      selectedOptionsLevel2,
+      hasOptionSelected
     });
   }
 
-  private onSingleSuboptionChange(suboption: IOptionItem): void {
-    const newSelectedSuboptions = this.clearRelatedSuboptions(suboption.parentKey);
-    this.updateSuboptionsState(true, suboption, newSelectedSuboptions);
+  private onUnlimitedOptionChange3(isChecked: boolean, option: IOptionItem, selectedOptions: IOptionItem[]): void {
+    const selectedOptionsLevel3 = this.updateOptions(isChecked, option, selectedOptions);
+    this.setState({
+      selectedOptionsLevel3
+    });
+  }
+
+  private updateOptions(isChecked: boolean, option: IOptionItem, selectedOptions: IOptionItem[]): IOptionItem[] {
+    if (isChecked) {
+      const newSel = [option, ...selectedOptions];
+      return newSel;
+    }
+
+    const newSelectedOptions = selectedOptions.filter(op => op.key !== option.key);
+    return newSelectedOptions;
+  }
+
+  private onSingleOptionChange3(option: IOptionItem): void {
+    let selectedOptionsLevel3 = this.clearRelatedSuboptions(
+      option.parentKey,
+      this.state.selectedOptionsLevel3,
+      this.suboptionsMap23
+    );
+    selectedOptionsLevel3 = [option, ...selectedOptionsLevel3];
+    this.setState({
+      selectedOptionsLevel3
+    });
   }
 
   private onSelectionComplete(): void {
-    this.props.onSelectionComplete(this.state.selectedOptionsLevel2, this.state.selectedOptionsLevel3);
+    this.props.onSelectionComplete(
+      this.state.selectedOptionsLevel1,
+      this.state.selectedOptionsLevel2,
+      this.state.selectedOptionsLevel3
+    );
   }
 }
