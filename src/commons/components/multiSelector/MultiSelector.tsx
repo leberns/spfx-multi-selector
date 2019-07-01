@@ -70,18 +70,18 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
   }
 
   public componentDidMount(): void {
-    this.initializeSuboptionsMap();
+    this.initializeRelationsMap();
     this.setStateWithSortedOptions();
   }
 
   public componentDidUpdate(prevProps: IMultiSelectorProps): void {
-    this.initializeSuboptionsMap();
+    this.initializeRelationsMap();
     if (this.props.optionsLevel2.length !== prevProps.optionsLevel2.length) {
       this.setStateWithSortedOptions();
     }
   }
 
-  private initializeSuboptionsMap(): void {
+  private initializeRelationsMap(): void {
     this.suboptionsMap12 = new RelationMap(this.props.optionsLevel1, this.props.optionsLevel2);
     this.suboptionsMap12.initializeRelations();
     this.suboptionsMap23 = new RelationMap(this.props.optionsLevel2, this.props.optionsLevel3);
