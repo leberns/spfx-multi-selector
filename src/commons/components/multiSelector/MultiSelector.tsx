@@ -6,9 +6,8 @@ import { IMultiSelectorProps } from './IMultiSelectorProps';
 import { IMultiSelectorState } from './IMultiSelectorState';
 import MultiOptionsEditor from '../multiOptionsEditor/MultiOptionsEditor';
 import SuboptionsRenderer from './suboptionsRenderer/SuboptionsRenderer';
-import { RelationMap } from '../../relations/RelationMap';
 import { IRelationMap } from '../../relations/IRelationMap';
-import { OptionsComparer } from '../../comparers/OptionsComparer';
+import { RelationMap } from '../../relations/RelationMap';
 import { IOptionItem } from '../../../interfaces/IOptionItem';
 
 export default class MultiSelector extends React.Component<IMultiSelectorProps, IMultiSelectorState> {
