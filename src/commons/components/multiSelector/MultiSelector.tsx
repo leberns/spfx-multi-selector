@@ -35,28 +35,28 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
           <div className={styles.selectorColumns}>
             <MultiOptionsEditor
               options={this.props.optionsLevel1}
-              onChange={(isChecked: boolean, option: IOptionItem) => this.onOptionChange1(isChecked, option)}
+              onChange={(isChecked: boolean, option: IOptionItem) => this.onOptionLevel1Change(isChecked, option)}
             />
           </div>
           <div className={styles.selectorColumns}>
             <SuboptionsRenderer
-              selectedParentOptions={this.state.selectedOptionsLevel1}
-              suboptions={this.state.optionsLevel2}
+              parentOptions={this.state.selectedOptionsLevel1}
+              allSuboptions={this.state.optionsLevel2}
               suboptionsMap={this.suboptionsMap12}
               onUnlimitedOptionChange={(isChecked: boolean, suboption: IOptionItem) =>
-                this.onUnlimitedOptionChange2(isChecked, suboption)
+                this.onUnlimitedOptionLevel2Change(isChecked, suboption)
               }
             />
           </div>
           <div className={styles.selectorColumns}>
             <SuboptionsRenderer
-              selectedParentOptions={this.state.selectedOptionsLevel2}
-              suboptions={this.props.optionsLevel3}
+              parentOptions={this.state.selectedOptionsLevel2}
+              allSuboptions={this.props.optionsLevel3}
               suboptionsMap={this.suboptionsMap23}
               onUnlimitedOptionChange={(isChecked: boolean, suboption: IOptionItem) =>
-                this.onUnlimitedOptionChange3(isChecked, suboption)
+                this.onUnlimitedOptionLevel3Change(isChecked, suboption)
               }
-              onSingleOptionChange={(suboption: IOptionItem) => this.onSingleOptionChange3(suboption)}
+              onSingleOptionChange={(suboption: IOptionItem) => this.onSingleOptionLevel3Change(suboption)}
             />
           </div>
         </div>
@@ -71,14 +71,10 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
 
   public componentDidMount(): void {
     this.initializeRelationsMap();
-    this.setStateWithSortedOptions();
   }
 
   public componentDidUpdate(prevProps: IMultiSelectorProps): void {
     this.initializeRelationsMap();
-    if (this.props.optionsLevel2.length !== prevProps.optionsLevel2.length) {
-      this.setStateWithSortedOptions();
-    }
   }
 
   private initializeRelationsMap(): void {
@@ -88,19 +84,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
     this.suboptionsMap23.initializeRelations();
   }
 
-  public setStateWithSortedOptions(): void {
-    const comparer = new OptionsComparer();
-    const optionsLevel2 = this.props.optionsLevel2.sort((a, b) => comparer.compare(a, b));
-    this.setState({
-      optionsLevel2
-    });
-    const optionsLevel3 = this.props.optionsLevel3.sort((a, b) => comparer.compare(a, b));
-    this.setState({
-      optionsLevel3
-    });
-  }
-
-  private onOptionChange1(isChecked: boolean, option: IOptionItem): void {
+  private onOptionLevel1Change(isChecked: boolean, option: IOptionItem): void {
     if (isChecked) {
       const newSelectedOptionsLevel1 = [option, ...this.state.selectedOptionsLevel1];
       this.setState({
@@ -123,7 +107,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
     });
   }
 
-  private onUnlimitedOptionChange2(isChecked: boolean, option: IOptionItem): void {
+  private onUnlimitedOptionLevel2Change(isChecked: boolean, option: IOptionItem): void {
     if (isChecked) {
       const newSel = [option, ...this.state.selectedOptionsLevel2];
       this.setState({
@@ -139,7 +123,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
     this.setState({ selectedOptionsLevel2, selectedOptionsLevel3, hasOptionSelected });
   }
 
-  private onUnlimitedOptionChange3(isChecked: boolean, option: IOptionItem): void {
+  private onUnlimitedOptionLevel3Change(isChecked: boolean, option: IOptionItem): void {
     if (isChecked) {
       const newSel = [option, ...this.state.selectedOptionsLevel3];
       this.setState({ selectedOptionsLevel3: newSel });
@@ -150,10 +134,9 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
     this.setState({ selectedOptionsLevel3 });
   }
 
-  private onSingleOptionChange3(option: IOptionItem): void {
-    const currentOptions = this.state.selectedOptionsLevel3;
-    const optionsNoSameParent = currentOptions.filter(op => op.parentKey !== option.parentKey);
-    const selectedOptionsLevel3 = [option, ...optionsNoSameParent];
+  private onSingleOptionLevel3Change(option: IOptionItem): void {
+    const remainingOptions = this.state.selectedOptionsLevel3.filter(op => op.parentKey !== option.parentKey);
+    const selectedOptionsLevel3 = [option, ...remainingOptions];
     this.setState({
       selectedOptionsLevel3
     });

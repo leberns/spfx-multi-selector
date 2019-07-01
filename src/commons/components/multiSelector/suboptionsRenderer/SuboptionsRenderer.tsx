@@ -17,11 +17,11 @@ export default class SuboptionsRenderer extends React.Component<ISuboptionsRende
   public render(): React.ReactElement<ISuboptionsRendererProps> {
     return (
       <div>
-        {this.state.sortedParentOptions.map(mainOption => (
+        {this.state.sortedParentOptions.map(parentOption => (
           <OptionsRenderer
-            key={mainOption.key}
-            parentOption={mainOption}
-            suboptions={this.props.suboptionsMap.getChildren(mainOption.key)}
+            key={parentOption.key}
+            parentOption={parentOption}
+            suboptions={this.props.suboptionsMap.getChildren(parentOption.key)}
             onUnlimitedOptionChange={(isChecked: boolean, option: IOptionItem) =>
               this.onUnlimitedOptionChange(isChecked, option)
             }
@@ -49,14 +49,14 @@ export default class SuboptionsRenderer extends React.Component<ISuboptionsRende
   }
 
   public componentDidUpdate(prevProps: ISuboptionsRendererProps): void {
-    if (this.props.selectedParentOptions.length !== prevProps.selectedParentOptions.length) {
+    if (this.props.parentOptions.length !== prevProps.parentOptions.length) {
       this.sortOptionsUpdateState();
     }
   }
 
   public sortOptionsUpdateState(): void {
     const comparer = new OptionsComparer();
-    const sortedParentOptions = this.props.selectedParentOptions.sort((a, b) => comparer.compare(a, b));
+    const sortedParentOptions = this.props.parentOptions.sort((a, b) => comparer.compare(a, b));
     this.setState({
       sortedParentOptions
     });
