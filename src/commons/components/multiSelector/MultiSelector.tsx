@@ -6,19 +6,17 @@ import { IMultiSelectorProps } from './IMultiSelectorProps';
 import { IMultiSelectorState } from './IMultiSelectorState';
 import MultiOptionsEditor from '../multiOptionsEditor/MultiOptionsEditor';
 import SuboptionsRenderer from './suboptionsRenderer/SuboptionsRenderer';
-import { IRelationMap } from '../../relations/IRelationMap';
 import { RelationMap } from '../../relations/RelationMap';
 import { IRelationalOption } from '../../../interfaces/IRelationalOption';
 
 export default class MultiSelector extends React.Component<IMultiSelectorProps, IMultiSelectorState> {
-  private suboptionsMap12: IRelationMap;
-  private suboptionsMap23: IRelationMap;
-
   constructor(props: IMultiSelectorProps) {
     super(props);
+    const suboptionsMap12 = new RelationMap([], []);
+    const suboptionsMap23 = new RelationMap([], []);
     this.state = {
-      optionsLevel2: this.props.optionsLevel2,
-      optionsLevel3: this.props.optionsLevel3,
+      suboptionsMap12,
+      suboptionsMap23,
       selectedOptionsLevel1: [],
       selectedOptionsLevel2: [],
       selectedOptionsLevel3: [],
@@ -40,8 +38,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
           <div className={styles.selectorColumns}>
             <SuboptionsRenderer
               parentOptions={this.state.selectedOptionsLevel1}
-              allSuboptions={this.state.optionsLevel2}
-              suboptionsMap={this.suboptionsMap12}
+              suboptionsMap={this.state.suboptionsMap12}
               onUnlimitedOptionChange={(isChecked: boolean, suboption: IRelationalOption) =>
                 this.onUnlimitedOptionLevel2Change(isChecked, suboption)
               }
@@ -50,8 +47,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
           <div className={styles.selectorColumns}>
             <SuboptionsRenderer
               parentOptions={this.state.selectedOptionsLevel2}
-              allSuboptions={this.props.optionsLevel3}
-              suboptionsMap={this.suboptionsMap23}
+              suboptionsMap={this.state.suboptionsMap23}
               onUnlimitedOptionChange={(isChecked: boolean, suboption: IRelationalOption) =>
                 this.onUnlimitedOptionLevel3Change(isChecked, suboption)
               }
@@ -69,18 +65,26 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
   }
 
   public componentDidMount(): void {
-    this.initializeRelationsMap();
+    this.updateStateRelationsMap();
   }
 
   public componentDidUpdate(prevProps: IMultiSelectorProps): void {
-    this.initializeRelationsMap();
+    if (
+      this.props.optionsLevel1.length !== prevProps.optionsLevel1.length ||
+      this.props.optionsLevel2.length !== prevProps.optionsLevel2.length ||
+      this.props.optionsLevel3.length !== prevProps.optionsLevel3.length
+    ) {
+      this.updateStateRelationsMap();
+    }
   }
 
-  private initializeRelationsMap(): void {
-    this.suboptionsMap12 = new RelationMap(this.props.optionsLevel1, this.props.optionsLevel2);
-    this.suboptionsMap12.initializeRelations();
-    this.suboptionsMap23 = new RelationMap(this.props.optionsLevel2, this.props.optionsLevel3);
-    this.suboptionsMap23.initializeRelations();
+  private updateStateRelationsMap(): void {
+    const suboptionsMap12 = new RelationMap(this.props.optionsLevel1, this.props.optionsLevel2);
+    suboptionsMap12.initializeRelations();
+    const suboptionsMap23 = new RelationMap(this.props.optionsLevel2, this.props.optionsLevel3);
+    suboptionsMap23.initializeRelations();
+
+    this.setState({ suboptionsMap12, suboptionsMap23 });
   }
 
   private onOptionLevel1Change(isChecked: boolean, option: IRelationalOption): void {

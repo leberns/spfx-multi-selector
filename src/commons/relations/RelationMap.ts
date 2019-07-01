@@ -15,10 +15,15 @@ export class RelationMap implements IRelationMap {
   }
 
   public getChildren(parentKey: string): IRelationalOption[] {
-    let children = this.parentChildMap[parentKey];
-    if (children === undefined) {
-      children = [];
+    if (!this.parentChildMap) {
+      return [];
     }
+
+    const children = this.parentChildMap[parentKey];
+    if (!!children) {
+      return children;
+    }
+
     return children;
   }
 }
