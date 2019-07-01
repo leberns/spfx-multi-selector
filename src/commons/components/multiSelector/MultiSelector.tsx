@@ -80,9 +80,9 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
 
   private updateStateRelationsMap(): void {
     const suboptionsMap12 = new RelationMap(this.props.optionsLevel1, this.props.optionsLevel2);
-    suboptionsMap12.initializeRelations();
+    suboptionsMap12.initialize();
     const suboptionsMap23 = new RelationMap(this.props.optionsLevel2, this.props.optionsLevel3);
-    suboptionsMap23.initializeRelations();
+    suboptionsMap23.initialize();
 
     this.setState({ suboptionsMap12, suboptionsMap23 });
   }

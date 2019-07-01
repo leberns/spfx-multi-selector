@@ -1,8 +1,8 @@
 import { IOptionsComparer } from './IOptionsComparer';
-import { IRelationalOption } from '../../interfaces/IRelationalOption';
+import { IOptionItem } from '../../interfaces/IOptionItem';
 
 export class OptionsComparer implements IOptionsComparer {
-  public compare(a: IRelationalOption, b: IRelationalOption): number {
+  public compare(a: IOptionItem, b: IOptionItem): number {
     return a.title > b.title ? 1 : -1;
   }
 }

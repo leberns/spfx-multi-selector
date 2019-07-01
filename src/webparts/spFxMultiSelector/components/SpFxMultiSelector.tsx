@@ -75,12 +75,12 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
   private optionsLevel3: IRelationalOption[] = [
     {
       key: '1',
-      title: 'John Blue',
+      title: 'Marry Green',
       parentKey: 'TA'
     },
     {
       key: '2',
-      title: 'Marry Green',
+      title: 'John Blue',
       parentKey: 'TA'
     },
     {
@@ -176,7 +176,7 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
         optionsLevel2,
         optionsLevel3
       });
-    }, 250);
+    }, 500);
   }
 
   private onSelectionComplete(
