@@ -100,38 +100,27 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
     });
   }
 
-  private onOptionChange1(isChecked: boolean, optionLevel1: IOptionItem): void {
+  private onOptionChange1(isChecked: boolean, option: IOptionItem): void {
     if (isChecked) {
-      const newSelectedOptionsLevel1 = [optionLevel1, ...this.state.selectedOptionsLevel1];
+      const newSelectedOptionsLevel1 = [option, ...this.state.selectedOptionsLevel1];
       this.setState({
         selectedOptionsLevel1: newSelectedOptionsLevel1
       });
       return;
     }
 
-    const selectedOptionsLevel1 = this.state.selectedOptionsLevel1.filter(op => op.key !== optionLevel1.key);
-    const selectedOptionsLevel2 = this.clearRelatedSuboptions(
-      optionLevel1.key,
-      this.state.selectedOptionsLevel2,
-      this.suboptionsMap12
+    const selectedOptionsLevel1 = this.state.selectedOptionsLevel1.filter(op => op.key !== option.key);
+    const selectedOptionsLevel2 = this.state.selectedOptionsLevel2.filter(op => op.parentKey !== option.key);
+    const selectedOptionsLevel3 = this.state.selectedOptionsLevel3.filter(
+      op => selectedOptionsLevel2.filter(parentOp => parentOp.key === op.parentKey).length > 0
     );
+    const hasOptionSelected = selectedOptionsLevel2.length > 0;
     this.setState({
       selectedOptionsLevel1,
-      selectedOptionsLevel2
+      selectedOptionsLevel2,
+      selectedOptionsLevel3,
+      hasOptionSelected
     });
-  }
-
-  private clearRelatedSuboptions(
-    parentKey: string,
-    options: IOptionItem[],
-    suboptionsMap: IRelationMap
-  ): IOptionItem[] {
-    let newSelectedSuboptions: IOptionItem[];
-    const relatedSuboptions = suboptionsMap.getChildren(parentKey);
-    relatedSuboptions.forEach(relatedSuboption => {
-      newSelectedSuboptions = options.filter(op => op.key !== relatedSuboption.key);
-    });
-    return newSelectedSuboptions;
   }
 
   private onUnlimitedOptionChange2(isChecked: boolean, option: IOptionItem): void {
