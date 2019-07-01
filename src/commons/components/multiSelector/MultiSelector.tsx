@@ -44,7 +44,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
               suboptions={this.state.optionsLevel2}
               suboptionsMap={this.suboptionsMap12}
               onUnlimitedOptionChange={(isChecked: boolean, suboption: IOptionItem) =>
-                this.onUnlimitedOptionChange2(isChecked, suboption, this.state.selectedOptionsLevel2)
+                this.onUnlimitedOptionChange2(isChecked, suboption)
               }
             />
           </div>
@@ -54,7 +54,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
               suboptions={this.props.optionsLevel3}
               suboptionsMap={this.suboptionsMap23}
               onUnlimitedOptionChange={(isChecked: boolean, suboption: IOptionItem) =>
-                this.onUnlimitedOptionChange3(isChecked, suboption, this.state.selectedOptionsLevel3)
+                this.onUnlimitedOptionChange3(isChecked, suboption)
               }
               onSingleOptionChange={(suboption: IOptionItem) => this.onSingleOptionChange3(suboption)}
             />
@@ -134,30 +134,31 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
     return newSelectedSuboptions;
   }
 
-  private onUnlimitedOptionChange2(isChecked: boolean, option: IOptionItem, selectedOptions: IOptionItem[]): void {
-    const selectedOptionsLevel2 = this.updateOptions(isChecked, option, selectedOptions);
-    const hasOptionSelected = selectedOptionsLevel2.length > 0;
-    this.setState({
-      selectedOptionsLevel2,
-      hasOptionSelected
-    });
-  }
-
-  private onUnlimitedOptionChange3(isChecked: boolean, option: IOptionItem, selectedOptions: IOptionItem[]): void {
-    const selectedOptionsLevel3 = this.updateOptions(isChecked, option, selectedOptions);
-    this.setState({
-      selectedOptionsLevel3
-    });
-  }
-
-  private updateOptions(isChecked: boolean, option: IOptionItem, selectedOptions: IOptionItem[]): IOptionItem[] {
+  private onUnlimitedOptionChange2(isChecked: boolean, option: IOptionItem): void {
     if (isChecked) {
-      const newSel = [option, ...selectedOptions];
-      return newSel;
+      const newSel = [option, ...this.state.selectedOptionsLevel2];
+      this.setState({
+        selectedOptionsLevel2: newSel,
+        hasOptionSelected: true
+      });
+      return;
     }
 
-    const newSelectedOptions = selectedOptions.filter(op => op.key !== option.key);
-    return newSelectedOptions;
+    const selectedOptionsLevel2 = this.state.selectedOptionsLevel2.filter(op => op.key !== option.key);
+    const selectedOptionsLevel3 = this.state.selectedOptionsLevel3.filter(op => op.parentKey !== option.key);
+    const hasOptionSelected = selectedOptionsLevel2.length > 0;
+    this.setState({ selectedOptionsLevel2, selectedOptionsLevel3, hasOptionSelected });
+  }
+
+  private onUnlimitedOptionChange3(isChecked: boolean, option: IOptionItem): void {
+    if (isChecked) {
+      const newSel = [option, ...this.state.selectedOptionsLevel3];
+      this.setState({ selectedOptionsLevel3: newSel });
+      return;
+    }
+
+    const selectedOptionsLevel3 = this.state.selectedOptionsLevel3.filter(op => op.key !== option.key);
+    this.setState({ selectedOptionsLevel3 });
   }
 
   private onSingleOptionChange3(option: IOptionItem): void {
