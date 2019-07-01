@@ -1,6 +1,6 @@
-import { IOptionItem } from '../../interfaces/IOptionItem';
+import { IRelationalOption } from '../../interfaces/IRelationalOption';
 
 export interface IRelationMap {
   initializeRelations(): void;
-  getChildren(parentKey: string): IOptionItem[];
+  getChildren(parentKey: string): IRelationalOption[];
 }

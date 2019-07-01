@@ -1,8 +1,8 @@
 import { IRelationMap } from './IRelationMap';
-import { IOptionItem } from '../../interfaces/IOptionItem';
+import { IRelationalOption } from '../../interfaces/IRelationalOption';
 
 export class RelationMap implements IRelationMap {
-  constructor(private parents: IOptionItem[], private children: IOptionItem[]) {}
+  constructor(private parents: IRelationalOption[], private children: IRelationalOption[]) {}
 
   private parentChildMap: object;
 
@@ -14,7 +14,7 @@ export class RelationMap implements IRelationMap {
     }
   }
 
-  public getChildren(parentKey: string): IOptionItem[] {
+  public getChildren(parentKey: string): IRelationalOption[] {
     let children = this.parentChildMap[parentKey];
     if (children === undefined) {
       children = [];

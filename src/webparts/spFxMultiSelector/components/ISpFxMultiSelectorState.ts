@@ -1,10 +1,10 @@
-import { IOptionItem } from '../../../interfaces/IOptionItem';
+import { IRelationalOption } from '../../../interfaces/IRelationalOption';
 
 export interface ISpFxMultiSelectorState {
-  optionsLevel1: IOptionItem[];
-  optionsLevel2: IOptionItem[];
-  optionsLevel3: IOptionItem[];
-  selectedOptionsLevel1: IOptionItem[];
-  selectedOptionsLevel2: IOptionItem[];
-  selectedOptionsLevel3: IOptionItem[];
+  optionsLevel1: IRelationalOption[];
+  optionsLevel2: IRelationalOption[];
+  optionsLevel3: IRelationalOption[];
+  selectedOptionsLevel1: IRelationalOption[];
+  selectedOptionsLevel2: IRelationalOption[];
+  selectedOptionsLevel3: IRelationalOption[];
 }

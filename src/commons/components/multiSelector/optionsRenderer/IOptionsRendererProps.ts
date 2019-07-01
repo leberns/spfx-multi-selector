@@ -1,8 +1,8 @@
-import { IOptionItem } from '../../../../interfaces/IOptionItem';
+import { IRelationalOption } from '../../../../interfaces/IRelationalOption';
 
 export interface IOptionsRendererProps {
-  parentOption: IOptionItem;
-  suboptions: IOptionItem[];
-  onUnlimitedOptionChange: (isChecked: boolean, suboption: IOptionItem) => void;
-  onSingleOptionChange: (suboption: IOptionItem) => void;
+  parentOption: IRelationalOption;
+  suboptions: IRelationalOption[];
+  onUnlimitedOptionChange: (isChecked: boolean, suboption: IRelationalOption) => void;
+  onSingleOptionChange: (suboption: IRelationalOption) => void;
 }

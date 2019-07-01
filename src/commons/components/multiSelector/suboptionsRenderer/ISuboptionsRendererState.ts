@@ -1,5 +1,5 @@
-import { IOptionItem } from '../../../../interfaces/IOptionItem';
+import { IRelationalOption } from '../../../../interfaces/IRelationalOption';
 
 export interface ISuboptionsRendererState {
-  sortedParentOptions: IOptionItem[];
+  sortedParentOptions: IRelationalOption[];
 }

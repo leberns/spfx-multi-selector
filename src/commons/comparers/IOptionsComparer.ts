@@ -1,5 +1,5 @@
-import { IOptionItem } from '../../interfaces/IOptionItem';
+import { IRelationalOption } from '../../interfaces/IRelationalOption';
 
 export interface IOptionsComparer {
-  compare(a: IOptionItem, b: IOptionItem): number;
+  compare(a: IRelationalOption, b: IRelationalOption): number;
 }

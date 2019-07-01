@@ -7,6 +7,7 @@ import { IOptionsBoxEditorState } from './IOptionsBoxEditorState';
 export default class OptionsBoxEditor extends React.Component<IOptionsBoxEditorProps, IOptionsBoxEditorState> {
   constructor(props: IOptionsBoxEditorProps) {
     super(props);
+
     this.state = {
       comboOptions: []
     };
@@ -48,8 +49,7 @@ export default class OptionsBoxEditor extends React.Component<IOptionsBoxEditorP
       };
       return comboOption;
     });
-    this.setState({
-      comboOptions
-    });
+
+    this.setState({ comboOptions });
   }
 }

@@ -5,7 +5,7 @@ import styles from './SpFxMultiSelector.module.scss';
 import { ISpFxMultiSelectorProps } from './ISpFxMultiSelectorProps';
 import { ISpFxMultiSelectorState } from './ISpFxMultiSelectorState';
 import MultiSelector from '../../../commons/components/multiSelector/MultiSelector';
-import { IOptionItem } from '../../../interfaces/IOptionItem';
+import { IRelationalOption } from '../../../interfaces/IRelationalOption';
 import { SelectionAllowance } from '../../../enums/SelectionAllowance';
 
 export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelectorProps, ISpFxMultiSelectorState> {
@@ -21,7 +21,7 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
     };
   }
 
-  private optionsLevel1: IOptionItem[] = [
+  private optionsLevel1: IRelationalOption[] = [
     {
       key: 'Department-1',
       title: 'Department 1',
@@ -39,7 +39,7 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
     }
   ];
 
-  private optionsLevel2: IOptionItem[] = [
+  private optionsLevel2: IRelationalOption[] = [
     {
       key: 'TA',
       title: 'Team A',
@@ -72,7 +72,7 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
     }
   ];
 
-  private optionsLevel3: IOptionItem[] = [
+  private optionsLevel3: IRelationalOption[] = [
     {
       key: '1',
       title: 'John Blue',
@@ -122,9 +122,9 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
                 optionsLevel2={this.state.optionsLevel2}
                 optionsLevel3={this.state.optionsLevel3}
                 onSelectionComplete={(
-                  selectedOptionsLevel1: IOptionItem[],
-                  selectedOptionsLevel2: IOptionItem[],
-                  selectedOptionsLevel3: IOptionItem[]
+                  selectedOptionsLevel1: IRelationalOption[],
+                  selectedOptionsLevel2: IRelationalOption[],
+                  selectedOptionsLevel3: IRelationalOption[]
                 ) => this.onSelectionComplete(selectedOptionsLevel1, selectedOptionsLevel2, selectedOptionsLevel3)}
               />
             </div>
@@ -166,24 +166,23 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
 
   private simulateAsyncDataFetch(): void {
     setTimeout(async () => {
-      const [optionsLevel1, optionsLevel2] = await Promise.resolve([this.optionsLevel1, this.optionsLevel2]);
+      const [optionsLevel1, optionsLevel2, optionsLevel3] = await Promise.resolve([
+        this.optionsLevel1,
+        this.optionsLevel2,
+        this.optionsLevel3
+      ]);
       this.setState({
         optionsLevel1,
         optionsLevel2,
-        optionsLevel3: []
+        optionsLevel3
       });
     }, 250);
-
-    setTimeout(async () => {
-      const optionsLevel3 = await Promise.resolve(this.optionsLevel3);
-      this.setState({ optionsLevel3 });
-    }, 5000);
   }
 
   private onSelectionComplete(
-    selectedOptionsLevel1: IOptionItem[],
-    selectedOptionsLevel2: IOptionItem[],
-    selectedOptionsLevel3: IOptionItem[]
+    selectedOptionsLevel1: IRelationalOption[],
+    selectedOptionsLevel2: IRelationalOption[],
+    selectedOptionsLevel3: IRelationalOption[]
   ): void {
     this.setState({
       selectedOptionsLevel1: [...selectedOptionsLevel1],

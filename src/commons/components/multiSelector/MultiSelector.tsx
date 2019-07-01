@@ -8,7 +8,7 @@ import MultiOptionsEditor from '../multiOptionsEditor/MultiOptionsEditor';
 import SuboptionsRenderer from './suboptionsRenderer/SuboptionsRenderer';
 import { IRelationMap } from '../../relations/IRelationMap';
 import { RelationMap } from '../../relations/RelationMap';
-import { IOptionItem } from '../../../interfaces/IOptionItem';
+import { IRelationalOption } from '../../../interfaces/IRelationalOption';
 
 export default class MultiSelector extends React.Component<IMultiSelectorProps, IMultiSelectorState> {
   private suboptionsMap12: IRelationMap;
@@ -34,7 +34,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
           <div className={styles.selectorColumns}>
             <MultiOptionsEditor
               options={this.props.optionsLevel1}
-              onChange={(isChecked: boolean, option: IOptionItem) => this.onOptionLevel1Change(isChecked, option)}
+              onChange={(isChecked: boolean, option: IRelationalOption) => this.onOptionLevel1Change(isChecked, option)}
             />
           </div>
           <div className={styles.selectorColumns}>
@@ -42,7 +42,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
               parentOptions={this.state.selectedOptionsLevel1}
               allSuboptions={this.state.optionsLevel2}
               suboptionsMap={this.suboptionsMap12}
-              onUnlimitedOptionChange={(isChecked: boolean, suboption: IOptionItem) =>
+              onUnlimitedOptionChange={(isChecked: boolean, suboption: IRelationalOption) =>
                 this.onUnlimitedOptionLevel2Change(isChecked, suboption)
               }
             />
@@ -52,10 +52,10 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
               parentOptions={this.state.selectedOptionsLevel2}
               allSuboptions={this.props.optionsLevel3}
               suboptionsMap={this.suboptionsMap23}
-              onUnlimitedOptionChange={(isChecked: boolean, suboption: IOptionItem) =>
+              onUnlimitedOptionChange={(isChecked: boolean, suboption: IRelationalOption) =>
                 this.onUnlimitedOptionLevel3Change(isChecked, suboption)
               }
-              onSingleOptionChange={(suboption: IOptionItem) => this.onSingleOptionLevel3Change(suboption)}
+              onSingleOptionChange={(suboption: IRelationalOption) => this.onSingleOptionLevel3Change(suboption)}
             />
           </div>
         </div>
@@ -83,7 +83,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
     this.suboptionsMap23.initializeRelations();
   }
 
-  private onOptionLevel1Change(isChecked: boolean, option: IOptionItem): void {
+  private onOptionLevel1Change(isChecked: boolean, option: IRelationalOption): void {
     if (isChecked) {
       const newSelectedOptionsLevel1 = [option, ...this.state.selectedOptionsLevel1];
       this.setState({
@@ -106,7 +106,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
     });
   }
 
-  private onUnlimitedOptionLevel2Change(isChecked: boolean, option: IOptionItem): void {
+  private onUnlimitedOptionLevel2Change(isChecked: boolean, option: IRelationalOption): void {
     if (isChecked) {
       const newSel = [option, ...this.state.selectedOptionsLevel2];
       this.setState({
@@ -122,7 +122,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
     this.setState({ selectedOptionsLevel2, selectedOptionsLevel3, hasOptionSelected });
   }
 
-  private onUnlimitedOptionLevel3Change(isChecked: boolean, option: IOptionItem): void {
+  private onUnlimitedOptionLevel3Change(isChecked: boolean, option: IRelationalOption): void {
     if (isChecked) {
       const newSel = [option, ...this.state.selectedOptionsLevel3];
       this.setState({ selectedOptionsLevel3: newSel });
@@ -133,7 +133,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
     this.setState({ selectedOptionsLevel3 });
   }
 
-  private onSingleOptionLevel3Change(option: IOptionItem): void {
+  private onSingleOptionLevel3Change(option: IRelationalOption): void {
     const remainingOptions = this.state.selectedOptionsLevel3.filter(op => op.parentKey !== option.parentKey);
     const selectedOptionsLevel3 = [option, ...remainingOptions];
     this.setState({

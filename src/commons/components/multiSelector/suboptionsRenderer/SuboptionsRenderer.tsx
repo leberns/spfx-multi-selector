@@ -3,7 +3,7 @@ import * as React from 'react';
 import { ISuboptionsRendererProps } from './ISuboptionsRendererProps';
 import { ISuboptionsRendererState } from './ISuboptionsRendererState';
 import OptionsRenderer from '../optionsRenderer/OptionsRenderer';
-import { IOptionItem } from '../../../../interfaces/IOptionItem';
+import { IRelationalOption } from '../../../../interfaces/IRelationalOption';
 import { OptionsComparer } from '../../../comparers/OptionsComparer';
 
 export default class SuboptionsRenderer extends React.Component<ISuboptionsRendererProps, ISuboptionsRendererState> {
@@ -22,23 +22,23 @@ export default class SuboptionsRenderer extends React.Component<ISuboptionsRende
             key={parentOption.key}
             parentOption={parentOption}
             suboptions={this.props.suboptionsMap.getChildren(parentOption.key)}
-            onUnlimitedOptionChange={(isChecked: boolean, option: IOptionItem) =>
+            onUnlimitedOptionChange={(isChecked: boolean, option: IRelationalOption) =>
               this.onUnlimitedOptionChange(isChecked, option)
             }
-            onSingleOptionChange={(option: IOptionItem) => this.onSingleOptionChange(option)}
+            onSingleOptionChange={(option: IRelationalOption) => this.onSingleOptionChange(option)}
           />
         ))}
       </div>
     );
   }
 
-  private onUnlimitedOptionChange(isChecked: boolean, option: IOptionItem): void {
+  private onUnlimitedOptionChange(isChecked: boolean, option: IRelationalOption): void {
     if (!!this.props.onUnlimitedOptionChange) {
       this.props.onUnlimitedOptionChange(isChecked, option);
     }
   }
 
-  private onSingleOptionChange(option: IOptionItem): void {
+  private onSingleOptionChange(option: IRelationalOption): void {
     if (!!this.props.onSingleOptionChange) {
       this.props.onSingleOptionChange(option);
     }
