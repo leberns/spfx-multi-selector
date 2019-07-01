@@ -161,12 +161,9 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
   }
 
   private onSingleOptionChange3(option: IOptionItem): void {
-    let selectedOptionsLevel3 = this.clearRelatedSuboptions(
-      option.parentKey,
-      this.state.selectedOptionsLevel3,
-      this.suboptionsMap23
-    );
-    selectedOptionsLevel3 = [option, ...selectedOptionsLevel3];
+    const currentOptions = this.state.selectedOptionsLevel3;
+    const optionsNoSameParent = currentOptions.filter(op => op.parentKey !== option.parentKey);
+    const selectedOptionsLevel3 = [option, ...optionsNoSameParent];
     this.setState({
       selectedOptionsLevel3
     });
