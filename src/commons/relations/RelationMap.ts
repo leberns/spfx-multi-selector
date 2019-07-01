@@ -30,6 +30,6 @@ export class RelationMap implements IRelationMap {
       return children;
     }
 
-    return children;
+    return [];
   }
 }
