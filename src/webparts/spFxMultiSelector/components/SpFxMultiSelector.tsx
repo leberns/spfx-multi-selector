@@ -12,6 +12,9 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
   constructor(props: ISpFxMultiSelectorProps) {
     super(props);
     this.state = {
+      optionsLevel1: [],
+      optionsLevel2: [],
+      optionsLevel3: [],
       selectedOptionsLevel1: [],
       selectedOptionsLevel2: [],
       selectedOptionsLevel3: []
@@ -115,9 +118,9 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
             <div className={styles.column}>
               <h2>Personal Available</h2>
               <MultiSelector
-                optionsLevel1={this.optionsLevel1}
-                optionsLevel2={this.optionsLevel2}
-                optionsLevel3={this.optionsLevel3}
+                optionsLevel1={this.state.optionsLevel1}
+                optionsLevel2={this.state.optionsLevel2}
+                optionsLevel3={this.state.optionsLevel3}
                 onSelectionComplete={(
                   selectedOptionsLevel1: IOptionItem[],
                   selectedOptionsLevel2: IOptionItem[],
@@ -155,6 +158,26 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
         </div>
       </div>
     );
+  }
+
+  public componentDidMount(): void {
+    this.simulateAsyncDataFetch();
+  }
+
+  private simulateAsyncDataFetch(): void {
+    setTimeout(async () => {
+      const [optionsLevel1, optionsLevel2] = await Promise.resolve([this.optionsLevel1, this.optionsLevel2]);
+      this.setState({
+        optionsLevel1,
+        optionsLevel2,
+        optionsLevel3: []
+      });
+    }, 250);
+
+    setTimeout(async () => {
+      const optionsLevel3 = await Promise.resolve(this.optionsLevel3);
+      this.setState({ optionsLevel3 });
+    }, 5000);
   }
 
   private onSelectionComplete(

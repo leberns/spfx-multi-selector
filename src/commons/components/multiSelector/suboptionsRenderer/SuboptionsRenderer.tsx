@@ -45,16 +45,16 @@ export default class SuboptionsRenderer extends React.Component<ISuboptionsRende
   }
 
   public componentDidMount(): void {
-    this.sortOptionsUpdateState();
+    this.updateStateSortedOptions();
   }
 
   public componentDidUpdate(prevProps: ISuboptionsRendererProps): void {
     if (this.props.parentOptions.length !== prevProps.parentOptions.length) {
-      this.sortOptionsUpdateState();
+      this.updateStateSortedOptions();
     }
   }
 
-  public sortOptionsUpdateState(): void {
+  public updateStateSortedOptions(): void {
     const comparer = new OptionsComparer();
     const sortedParentOptions = this.props.parentOptions.sort((a, b) => comparer.compare(a, b));
     this.setState({

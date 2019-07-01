@@ -31,10 +31,16 @@ export default class OptionsBoxEditor extends React.Component<IOptionsBoxEditorP
   }
 
   public componentDidMount(): void {
-    this.defineComboOptions();
+    this.updateStateComboOptions();
   }
 
-  public defineComboOptions(): void {
+  public componentDidUpdate(prevProps: IOptionsBoxEditorProps): void {
+    if (this.props.options.length !== prevProps.options.length) {
+      this.updateStateComboOptions();
+    }
+  }
+
+  public updateStateComboOptions(): void {
     const comboOptions = this.props.options.map(option => {
       const comboOption: IComboBoxOption = {
         key: option.key,
