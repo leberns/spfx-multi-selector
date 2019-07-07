@@ -110,6 +110,10 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
     }
   ];
 
+  private defaultSelectedKeys1: string[] = ['Department-2'];
+  private defaultSelectedKeys2: string[] = ['TC'];
+  private defaultSelectedKeys3: string[] = ['5'];
+
   public render(): React.ReactElement<ISpFxMultiSelectorProps> {
     return (
       <div className={styles.spFxMultiSelector}>
@@ -121,6 +125,9 @@ export default class SpFxMultiSelector extends React.Component<ISpFxMultiSelecto
                 optionsLevel1={this.state.optionsLevel1}
                 optionsLevel2={this.state.optionsLevel2}
                 optionsLevel3={this.state.optionsLevel3}
+                defaultSelectedKeys1={this.defaultSelectedKeys1}
+                defaultSelectedKeys2={this.defaultSelectedKeys2}
+                defaultSelectedKeys3={this.defaultSelectedKeys3}
                 onSelectionComplete={(
                   selectedOptionsLevel1: IRelationalOption[],
                   selectedOptionsLevel2: IRelationalOption[],

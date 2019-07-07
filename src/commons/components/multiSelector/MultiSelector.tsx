@@ -8,6 +8,7 @@ import MultiOptionsEditor from '../multiOptionsEditor/MultiOptionsEditor';
 import SuboptionsRenderer from './suboptionsRenderer/SuboptionsRenderer';
 import { RelationMap } from '../../relations/RelationMap';
 import { IRelationalOption } from '../../../interfaces/IRelationalOption';
+import { IRelationMap } from '../../relations/IRelationMap';
 
 export default class MultiSelector extends React.Component<IMultiSelectorProps, IMultiSelectorState> {
   constructor(props: IMultiSelectorProps) {
@@ -32,6 +33,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
           <div className={styles.selectorColumns}>
             <MultiOptionsEditor
               options={this.props.optionsLevel1}
+              defaultSelectedKeys={this.props.defaultSelectedKeys1}
               onChange={(isChecked: boolean, option: IRelationalOption) => this.onOptionLevel1Change(isChecked, option)}
             />
           </div>
@@ -39,6 +41,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
             <SuboptionsRenderer
               parentOptions={this.state.selectedOptionsLevel1}
               suboptionsMap={this.state.suboptionsMap12}
+              defaultSelectedKeys={this.props.defaultSelectedKeys2}
               onUnlimitedOptionChange={(isChecked: boolean, suboption: IRelationalOption) =>
                 this.onUnlimitedOptionLevel2Change(isChecked, suboption)
               }
@@ -48,6 +51,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
             <SuboptionsRenderer
               parentOptions={this.state.selectedOptionsLevel2}
               suboptionsMap={this.state.suboptionsMap23}
+              defaultSelectedKeys={this.props.defaultSelectedKeys3}
               onUnlimitedOptionChange={(isChecked: boolean, suboption: IRelationalOption) =>
                 this.onUnlimitedOptionLevel3Change(isChecked, suboption)
               }
@@ -65,7 +69,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
   }
 
   public componentDidMount(): void {
-    this.updateStateRelationsMap();
+    this.updateState();
   }
 
   public componentDidUpdate(prevProps: IMultiSelectorProps): void {
@@ -74,17 +78,83 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
       this.props.optionsLevel2.length !== prevProps.optionsLevel2.length ||
       this.props.optionsLevel3.length !== prevProps.optionsLevel3.length
     ) {
-      this.updateStateRelationsMap();
+      this.updateState();
     }
   }
 
-  private updateStateRelationsMap(): void {
-    const suboptionsMap12 = new RelationMap(this.props.optionsLevel1, this.props.optionsLevel2);
+  private updateState(): void {
+    const [suboptionsMap12, suboptionsMap23] = this.initializeRelationsMap();
+    const [
+      selectedOptionsLevel1,
+      selectedOptionsLevel2,
+      selectedOptionsLevel3
+    ] = this.initializeDefaultSelectedOptions();
+
+    this.setState({
+      suboptionsMap12,
+      suboptionsMap23,
+      selectedOptionsLevel1,
+      selectedOptionsLevel2,
+      selectedOptionsLevel3
+    });
+  }
+
+  private initializeRelationsMap(): IRelationMap[] {
+    const suboptionsMap12: IRelationMap = new RelationMap(this.props.optionsLevel1, this.props.optionsLevel2);
     suboptionsMap12.initialize();
-    const suboptionsMap23 = new RelationMap(this.props.optionsLevel2, this.props.optionsLevel3);
+    const suboptionsMap23: IRelationMap = new RelationMap(this.props.optionsLevel2, this.props.optionsLevel3);
     suboptionsMap23.initialize();
 
-    this.setState({ suboptionsMap12, suboptionsMap23 });
+    return [suboptionsMap12, suboptionsMap23];
+  }
+
+  private initializeDefaultSelectedOptions(): IRelationalOption[][] {
+    const selectedOptionsLevel1 = this.mergeOptions(
+      this.props.defaultSelectedKeys1,
+      this.state.selectedOptionsLevel1,
+      this.props.optionsLevel1
+    );
+
+    const selectedOptionsLevel2 = this.mergeOptions(
+      this.props.defaultSelectedKeys2,
+      this.state.selectedOptionsLevel2,
+      this.props.optionsLevel2
+    );
+
+    const selectedOptionsLevel3 = this.mergeOptions(
+      this.props.defaultSelectedKeys3,
+      this.state.selectedOptionsLevel3,
+      this.props.optionsLevel3
+    );
+
+    return [selectedOptionsLevel1, selectedOptionsLevel2, selectedOptionsLevel3];
+  }
+
+  private mergeOptions(
+    defaultSelectedKeys: string[],
+    selectedOptions: IRelationalOption[],
+    options: IRelationalOption[]
+  ): IRelationalOption[] {
+    const keysSet = new Set(defaultSelectedKeys);
+    for (const op of selectedOptions) {
+      keysSet.add(op.key);
+    }
+
+    const mergedKeys = [];
+    keysSet.forEach(key => mergedKeys.push(key));
+    const mergedOptions = [];
+    for (const key of mergedKeys) {
+      const opts = options.filter(op => op.key === key);
+      if (opts.length > 0) {
+        mergedOptions.push(opts[0]);
+      }
+    }
+
+    if (!!mergedOptions) {
+      return mergedOptions;
+    }
+
+    return [];
   }
 
   private onOptionLevel1Change(isChecked: boolean, option: IRelationalOption): void {

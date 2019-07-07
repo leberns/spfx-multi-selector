@@ -18,7 +18,11 @@ export default class OptionsRenderer extends React.Component<IOptionsRendererPro
       <div>
         <div>{escape(title)}</div>
         {selectionAllowance === SelectionAllowance.Unlimited ? (
-          <MultiOptionsEditor options={this.props.suboptions} onChange={this.props.onUnlimitedOptionChange} />
+          <MultiOptionsEditor
+            options={this.props.suboptions}
+            defaultSelectedKeys={this.props.defaultSelectedKeys}
+            onChange={this.props.onUnlimitedOptionChange}
+          />
         ) : (
           <OptionsBoxEditor options={this.props.suboptions} onChange={this.props.onSingleOptionChange} />
         )}

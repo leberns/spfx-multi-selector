@@ -21,6 +21,7 @@ export default class SuboptionsRenderer extends React.Component<ISuboptionsRende
           <OptionsRenderer
             key={parentOption.key}
             parentOption={parentOption}
+            defaultSelectedKeys={this.props.defaultSelectedKeys}
             suboptions={this.props.suboptionsMap.getChildren(parentOption.key)}
             onUnlimitedOptionChange={(isChecked: boolean, option: IRelationalOption) =>
               this.onUnlimitedOptionChange(isChecked, option)
