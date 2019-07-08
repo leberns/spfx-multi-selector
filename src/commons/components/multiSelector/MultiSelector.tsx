@@ -89,13 +89,15 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
       selectedOptionsLevel2,
       selectedOptionsLevel3
     ] = this.initializeDefaultSelectedOptions();
+    const hasOptionSelected = this.hasOptionSelected(selectedOptionsLevel2);
 
     this.setState({
       suboptionsMap12,
       suboptionsMap23,
       selectedOptionsLevel1,
       selectedOptionsLevel2,
-      selectedOptionsLevel3
+      selectedOptionsLevel3,
+      hasOptionSelected
     });
   }
 
@@ -157,6 +159,11 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
     return [];
   }
 
+  private hasOptionSelected(selectedOptionsLevel2: IRelationalOption[]): boolean {
+    const hasOptionSelected = selectedOptionsLevel2.length > 0;
+    return hasOptionSelected;
+  }
+
   private onOptionLevel1Change(isChecked: boolean, option: IRelationalOption): void {
     if (isChecked) {
       const newSelectedOptionsLevel1 = [option, ...this.state.selectedOptionsLevel1];
@@ -171,7 +178,7 @@ export default class MultiSelector extends React.Component<IMultiSelectorProps, 
     const selectedOptionsLevel3 = this.state.selectedOptionsLevel3.filter(
       op => selectedOptionsLevel2.filter(parentOp => parentOp.key === op.parentKey).length > 0
     );
-    const hasOptionSelected = selectedOptionsLevel2.length > 0;
+    const hasOptionSelected = this.hasOptionSelected(selectedOptionsLevel2);
     this.setState({
       selectedOptionsLevel1,
       selectedOptionsLevel2,
