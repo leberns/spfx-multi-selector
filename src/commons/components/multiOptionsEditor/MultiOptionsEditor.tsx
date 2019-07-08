@@ -23,6 +23,9 @@ export default class MultiOptionsEditor extends React.Component<IMultiOptionsEdi
   }
 
   private isChecked(option: IOptionItem): boolean {
+    if (!this.props.defaultSelectedKeys) {
+      return false;
+    }
     const isChecked = this.props.defaultSelectedKeys.indexOf(option.key) !== -1;
     return isChecked;
   }
