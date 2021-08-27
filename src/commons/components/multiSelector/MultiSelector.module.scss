@@ -1,0 +1,30 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+.multiSelector {
+  .row {
+    @include ms-Grid-row;
+  }
+
+  .column {
+    @include ms-Grid-col;
+    @include ms-sm12;
+    @include ms-md12;
+    @include ms-lg12;
+    @include ms-xl12;
+    @include ms-xxl12;
+    @include ms-smPush10;
+    @include ms-mdPush10;
+    @include ms-lgPush10;
+    @include ms-xlPush10;
+    @include ms-xxlPush10;
+  }
+
+  .selectorColumns {
+    @include ms-Grid-col;
+    @include ms-sm4;
+    @include ms-md4;
+    @include ms-lg4;
+    @include ms-xl4;
+    @include ms-xxl4;
+  }
+}
